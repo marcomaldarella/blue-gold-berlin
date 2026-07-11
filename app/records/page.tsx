@@ -20,6 +20,10 @@ export default function RecordsPage() {
       <div className="page-inner">
         <NavBar />
 
+        <h1 className="display" data-enter>
+          records <span className="dim">— vinyl &amp; digital</span>
+        </h1>
+
         <section aria-labelledby="bg-heading">
           <div className="section-header" data-enter>
             <span className="eyebrow" id="bg-heading">

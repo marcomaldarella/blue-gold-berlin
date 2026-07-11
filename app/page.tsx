@@ -2,7 +2,6 @@ import Image from "next/image";
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import SiteFooter from "@/components/SiteFooter";
-import Marquee from "@/components/Marquee";
 import PageEntrance from "@/components/PageEntrance";
 import ReleaseCard from "@/components/ReleaseCard";
 import { RELEASES } from "@/lib/releases";
@@ -41,9 +40,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <Marquee />
-
-        <section aria-labelledby="latest-heading">
+        <section aria-labelledby="latest-heading" style={{ marginTop: "clamp(48px, 10vh, 120px)" }}>
           <div className="section-header" data-enter>
             <span className="eyebrow" id="latest-heading">
               latest releases

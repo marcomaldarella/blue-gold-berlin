@@ -17,6 +17,10 @@ export default function EventsPage() {
       <div className="page-inner">
         <NavBar />
 
+        <h1 className="display" data-enter>
+          events <span className="dim">— berlin</span>
+        </h1>
+
         {HOST_ORDER.map((host) => {
           const events = EVENTS.filter((e) => e.host === host);
           if (events.length === 0) return null;

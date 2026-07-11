@@ -80,7 +80,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${inter.variable} ${spaceMono.variable}`}>
       <body>
         <script
           type="application/ld+json"

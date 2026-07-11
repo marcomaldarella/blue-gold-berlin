@@ -17,6 +17,10 @@ export default function AboutPage() {
       <div className="page-inner">
         <NavBar />
 
+        <h1 className="display" data-enter>
+          about <span className="dim">— the label</span>
+        </h1>
+
         <div className="about-grid">
           <section className="about-bio" aria-labelledby="bio-heading">
             <div className="section-header" data-enter>
