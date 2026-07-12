@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Zalando_Sans_Expanded } from "next/font/google";
+import localFont from "next/font/local";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const zalando = Zalando_Sans_Expanded({
-  subsets: ["latin"],
+// Zalando Sans Expanded: troppo recente per il manifest di next/font/google
+// in Next 16.2.10 → self-hosted (variabile, wght 200-900, subset latin)
+const zalando = localFont({
+  src: "./fonts/ZalandoSansExpanded-Variable.woff2",
+  weight: "200 900",
   variable: "--font-sans",
   display: "swap",
 });
