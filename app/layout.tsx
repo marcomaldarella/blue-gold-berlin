@@ -8,7 +8,7 @@ import "./globals.css";
 const zalando = localFont({
   src: "./fonts/ZalandoSansExpanded-Variable.woff2",
   weight: "200 900",
-  variable: "--font-sans",
+  variable: "--font-zalando",
   display: "swap",
 });
 

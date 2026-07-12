@@ -14,7 +14,7 @@
   --gold-dim: rgba(200, 162, 74, 0.45);
   --hairline: rgba(216, 216, 200, 0.12);
   --hairline-soft: rgba(216, 216, 200, 0.06);
-  --font-sans: var(--font-sans), ui-sans-serif, sans-serif;
+  --font-sans: var(--font-zalando), ui-sans-serif, sans-serif;
   --font-mono: var(--font-sans), sans-serif; /* extended tutto: niente più mono */
 }
 
