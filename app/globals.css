@@ -12,6 +12,8 @@
   --gold: #c8a24a;
   --gold-soft: #e0c27a;
   --gold-dim: rgba(200, 162, 74, 0.45);
+  --label-bg: #a3a39a;   /* grigio targhetta (dalla cover ar004) */
+  --label-ink: #262624;  /* antracite */
   --hairline: rgba(216, 216, 200, 0.12);
   --hairline-soft: rgba(216, 216, 200, 0.06);
   --font-sans: var(--font-zalando), ui-sans-serif, sans-serif;
@@ -172,8 +174,9 @@ body::before {
   display: inline-flex;
   flex-direction: column;
   gap: 2px;
-  background: var(--ink);
-  border: 0.5px solid var(--hairline);
+  background: var(--label-bg);
+  color: var(--label-ink);
+  border: 0.5px solid transparent;
   padding: 0.35rem 0.55rem;
   font-size: 12px;
   font-weight: 300;
@@ -187,7 +190,7 @@ body::before {
   font-size: 9px;
   font-weight: 400;
   letter-spacing: 0.06em;
-  color: var(--gold-dim);
+  color: rgba(38, 38, 36, 0.6);
 }
 
 .brand-box:hover em {
@@ -204,31 +207,31 @@ body::before {
 
 .nav-link {
   position: relative;
-  background: var(--ink);
-  border: 0.5px solid var(--hairline);
+  background: var(--label-bg);
+  border: 0.5px solid transparent;
   padding: 0.3rem 0.5rem;
   font-size: 12px;
   font-weight: 400;
   letter-spacing: -0.005em;
-  color: var(--paper-dim);
+  color: rgba(38, 38, 36, 0.66);
   transition: color 0.2s ease, border-color 0.2s ease;
 }
 
 .nav-link:hover {
-  color: var(--paper);
+  color: var(--label-ink);
 }
 
 .nav-link.is-active {
-  color: var(--blue);
-  border-color: var(--blue-dim);
+  color: var(--label-ink);
+  border-color: var(--label-ink);
 }
 
 .nav-link.is-external {
-  color: var(--gold-dim);
+  color: rgba(38, 38, 36, 0.55);
 }
 
 .nav-link.is-external:hover {
-  color: var(--gold);
+  color: var(--label-ink);
 }
 
 /* ---- label / eyebrow: minuscolo, mai maiuscolo ---- */
@@ -404,43 +407,28 @@ body::before {
   filter: saturate(1.05);
 }
 
-/* caption stampata sull'artwork, senza box — riferimento:
-   la cover di dead channels ritual. Due strati con lo stesso
-   testo: sotto un alone chiaro non-blended (::before + attr)
-   per la leggibilità sulle cover scure, sopra il type bold
-   antracite in multiply, come inciso nella texture. */
+/* caption a targhetta, come la banda grigia della cover ar004:
+   antracite su grigio, in basso a sinistra, senza blend */
 .release-caption {
   position: absolute;
-  bottom: 0;
+  bottom: clamp(8px, 1vw, 14px);
   left: 0;
-  padding: clamp(10px, 1.1vw, 18px);
+  padding: 0.28em 0.55em;
   max-width: 94%;
+  background: var(--label-bg);
   font-weight: 300;
-  font-size: clamp(16px, 1.6vw, 24px);
+  font-size: clamp(15px, 1.5vw, 22px);
   letter-spacing: -0.02em;
-  line-height: 1.02;
-}
-
-.release-caption::before {
-  content: attr(data-caption);
-  position: absolute;
-  inset: 0;
-  padding: inherit;
-  color: transparent;
-  text-shadow:
-    0 0 2px rgba(216, 216, 200, 0.4),
-    0 0 16px rgba(216, 216, 200, 0.55);
+  line-height: 1.05;
 }
 
 .release-caption .cap-text {
   position: relative;
-  color: #2a2a28;
-  mix-blend-mode: multiply;
+  color: var(--label-ink);
 }
 
-/* stesso peso del titolo: i due strati devono restare allineati */
 .release-caption .cap-text span {
-  opacity: 0.8;
+  opacity: 0.62;
 }
 
 .release-meta {
