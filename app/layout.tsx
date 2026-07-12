@@ -1,13 +1,12 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo } from "next/font/google";
+import { Zalando_Sans_Expanded } from "next/font/google";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const archivo = Archivo({
+const zalando = Zalando_Sans_Expanded({
   subsets: ["latin"],
-  variable: "--font-archivo",
+  variable: "--font-sans",
   display: "swap",
-  axes: ["wdth"],
 });
 
 export const metadata: Metadata = {
@@ -73,7 +72,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={archivo.variable}>
+    <html lang="en" className={zalando.variable}>
       <body>
         <script
           type="application/ld+json"
