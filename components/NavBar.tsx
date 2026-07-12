@@ -17,7 +17,7 @@ export default function NavBar() {
     <header className="site-header" data-enter>
       <Link href="/" className="brand-box" aria-label="Bluegold — home">
         <span>bluegold</span>
-        <em>berlin · {SITE.tagline}</em>
+        <em>berlin</em>
       </Link>
       <nav className="main-menu" aria-label="main navigation">
         {LINKS.map(({ href, label }) => (

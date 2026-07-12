@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Mono } from "next/font/google";
+import { Archivo, Space_Mono } from "next/font/google";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-const inter = Inter({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["200", "300", "400"],
-  variable: "--font-inter",
+  variable: "--font-archivo",
   display: "swap",
+  axes: ["wdth"],
 });
 
 const spaceMono = Space_Mono({
@@ -80,7 +80,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${spaceMono.variable}`}>
+    <html lang="en" className={`${archivo.variable} ${spaceMono.variable}`}>
       <body>
         <script
           type="application/ld+json"

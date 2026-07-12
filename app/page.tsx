@@ -4,7 +4,6 @@ import NavBar from "@/components/NavBar";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import SplashScreen from "@/components/SplashScreen";
-import { SITE } from "@/lib/site";
 
 export default function HomePage() {
   return (
@@ -26,9 +25,6 @@ export default function HomePage() {
               priority
             />
           </div>
-          <p className="hero-tag" data-enter>
-            {SITE.tagline}
-          </p>
           <div className="hero-lines" data-enter>
             <p>
               <strong>bluegold studios</strong> — record label &amp; studio,
