@@ -138,7 +138,7 @@ body::before {
 /* ---- titolo display, alla studio dumbar ---- */
 .display {
   font-size: clamp(44px, 8vw, 120px);
-  font-weight: 760;
+  font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 0.94;
   color: var(--paper);
@@ -176,7 +176,7 @@ body::before {
   border: 0.5px solid var(--hairline);
   padding: 0.35rem 0.55rem;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 300;
   letter-spacing: -0.005em;
   line-height: 1.3;
 }
@@ -185,7 +185,7 @@ body::before {
   font-style: normal;
   font-family: var(--font-mono);
   font-size: 9px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.06em;
   color: var(--gold-dim);
 }
@@ -208,7 +208,7 @@ body::before {
   border: 0.5px solid var(--hairline);
   padding: 0.3rem 0.5rem;
   font-size: 12px;
-  font-weight: 550;
+  font-weight: 400;
   letter-spacing: -0.005em;
   color: var(--paper-dim);
   transition: color 0.2s ease, border-color 0.2s ease;
@@ -235,7 +235,7 @@ body::before {
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--paper-faint);
 }
@@ -332,7 +332,7 @@ body::before {
 }
 
 .hero-lines strong {
-  font-weight: 650;
+  font-weight: 300;
   color: var(--paper);
 }
 
@@ -346,7 +346,7 @@ body::before {
 
 .hero-nav a {
   font-size: clamp(26px, 4.5vw, 64px);
-  font-weight: 750;
+  font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 1;
   color: var(--paper-dim);
@@ -432,7 +432,7 @@ body::before {
   left: 0;
   padding: clamp(10px, 1.1vw, 18px);
   max-width: 94%;
-  font-weight: 800;
+  font-weight: 300;
   font-size: clamp(16px, 1.6vw, 24px);
   letter-spacing: -0.02em;
   line-height: 1.02;
@@ -469,7 +469,7 @@ body::before {
   border-top: 0.5px solid var(--hairline-soft);
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--paper-faint);
 }
@@ -497,14 +497,14 @@ a.event-row:hover {
 .event-date {
   font-family: var(--font-mono);
   font-size: clamp(11px, 1vw, 13px);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--paper-faint);
 }
 
 .event-title {
   font-size: clamp(16px, 1.8vw, 26px);
-  font-weight: 700;
+  font-weight: 300;
   letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: hidden;
@@ -532,14 +532,14 @@ a.event-row:hover {
 
 .event-price {
   font-size: clamp(15px, 1.5vw, 21px);
-  font-weight: 600;
+  font-weight: 300;
   text-align: right;
 }
 
 .event-buy {
   font-family: var(--font-mono);
   font-size: clamp(10px, 0.9vw, 12px);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--blue-dim);
   margin-top: 3px;
@@ -581,7 +581,7 @@ a.event-row:hover .event-buy {
 }
 
 .about-bio strong {
-  font-weight: 650;
+  font-weight: 300;
   color: var(--paper);
 }
 
@@ -598,7 +598,7 @@ a.event-row:hover .event-buy {
   width: clamp(88px, 8vw, 120px);
   font-family: var(--font-mono);
   font-size: clamp(10px, 0.9vw, 12px);
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--paper-faint);
 }
@@ -616,7 +616,7 @@ a.event-row:hover .event-buy {
   padding: 8px 12px;
   font-family: var(--font-mono);
   font-size: 10px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.04em;
   color: var(--paper-dim);
   border-bottom: 0.5px solid var(--hairline-soft);
@@ -658,7 +658,7 @@ a.radio-item:hover {
   background: linear-gradient(180deg, rgba(10, 10, 8, 0) 0%, rgba(10, 10, 8, 0.88) 45%);
   font-family: var(--font-mono);
   font-size: 9px;
-  font-weight: 500;
+  font-weight: 400;
   letter-spacing: 0.05em;
   color: var(--paper-faint);
 }
