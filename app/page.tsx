@@ -32,11 +32,6 @@ export default function HomePage() {
             </p>
             <p>sound design for altered states of mind · founded by mruda</p>
           </div>
-          <nav className="hero-nav" aria-label="sections" data-enter>
-            <Link href="/records">records</Link>
-            <Link href="/events">events</Link>
-            <Link href="/about">about</Link>
-          </nav>
         </section>
       </div>
       <SiteFooter />

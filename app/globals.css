@@ -336,27 +336,8 @@ body::before {
   color: var(--paper);
 }
 
-.hero-nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: clamp(24px, 5vw, 88px);
-  margin-top: clamp(12px, 3vh, 32px);
-}
 
-.hero-nav a {
-  font-size: clamp(26px, 4.5vw, 64px);
-  font-weight: 300;
-  letter-spacing: -0.03em;
-  line-height: 1;
-  color: var(--paper-dim);
-  transition: color 0.25s ease;
-}
 
-.hero-nav a:hover,
-.hero-nav a:focus-visible {
-  color: var(--blue-soft);
-}
 
 /* ---- splash d'ingresso ---- */
 .splash {
