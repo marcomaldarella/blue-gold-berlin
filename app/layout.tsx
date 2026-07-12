@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Space_Mono } from "next/font/google";
+import { Archivo } from "next/font/google";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -8,13 +8,6 @@ const archivo = Archivo({
   variable: "--font-archivo",
   display: "swap",
   axes: ["wdth"],
-});
-
-const spaceMono = Space_Mono({
-  subsets: ["latin"],
-  weight: ["400"],
-  variable: "--font-mono-var",
-  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -80,7 +73,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${archivo.variable} ${spaceMono.variable}`}>
+    <html lang="en" className={archivo.variable}>
       <body>
         <script
           type="application/ld+json"

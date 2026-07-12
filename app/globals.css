@@ -15,7 +15,7 @@
   --hairline: rgba(216, 216, 200, 0.12);
   --hairline-soft: rgba(216, 216, 200, 0.06);
   --font-sans: var(--font-archivo), ui-sans-serif, sans-serif;
-  --font-mono: var(--font-mono-var), ui-monospace, "SF Mono", Menlo, monospace;
+  --font-mono: var(--font-archivo), sans-serif; /* extended tutto: niente più mono */
 }
 
 *,
@@ -33,6 +33,7 @@ html {
 }
 
 body {
+  font-variant-numeric: tabular-nums;
   font-family: var(--font-sans);
   font-weight: 400;
   font-stretch: 108%;
