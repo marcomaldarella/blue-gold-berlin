@@ -325,14 +325,16 @@ body::before {
 .hero-lines {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: clamp(14px, 1.6vw, 21px);
-  letter-spacing: -0.015em;
+  gap: 2px;
+  font-size: clamp(12px, 1.2vw, 16px);
+  font-weight: 250; /* light vero */
+  letter-spacing: -0.01em;
+  line-height: 1.25; /* interlinea stretta */
   color: var(--paper-dim);
 }
 
 .hero-lines strong {
-  font-weight: 300;
+  font-weight: 320;
   color: var(--paper);
 }
 
