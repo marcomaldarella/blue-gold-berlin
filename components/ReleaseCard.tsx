@@ -25,10 +25,10 @@ export default function ReleaseCard({
           priority={priority}
           sizes="(max-width: 720px) 50vw, 280px"
         />
+        <figcaption className="release-caption">
+          {release.title} <span>— {release.artist}</span>
+        </figcaption>
       </figure>
-      <span className="release-caption">
-        {release.title} <span>— {release.artist}</span>
-      </span>
       <span className="release-meta">
         <span className="cat">{release.catalog}</span>
         <span>{release.label}</span>

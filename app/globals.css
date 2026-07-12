@@ -125,6 +125,8 @@ body::before {
   display: flex;
   flex-direction: column;
   padding: clamp(16px, 1.4vw, 26px);
+  /* compensa l'altezza dell'header fixed */
+  padding-top: clamp(88px, 12vh, 128px);
   padding-bottom: 112px;
 }
 
@@ -146,13 +148,23 @@ body::before {
   color: var(--paper-faint);
 }
 
-/* ---- header ---- */
+/* ---- header: fixed in alto durante lo scroll ---- */
 .site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 30;
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: 16px;
-  margin-bottom: clamp(32px, 7vh, 72px);
+  padding: clamp(16px, 1.4vw, 26px);
+  pointer-events: none;
+}
+
+.site-header a {
+  pointer-events: auto;
 }
 
 .brand-box {
@@ -325,6 +337,53 @@ body::before {
   color: var(--paper);
 }
 
+.hero-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: clamp(24px, 5vw, 88px);
+  margin-top: clamp(12px, 3vh, 32px);
+}
+
+.hero-nav a {
+  font-size: clamp(26px, 4.5vw, 64px);
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--paper-dim);
+  transition: color 0.25s ease;
+}
+
+.hero-nav a:hover,
+.hero-nav a:focus-visible {
+  color: var(--blue-soft);
+}
+
+/* ---- splash d'ingresso ---- */
+.splash {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.splash img {
+  width: min(300px, 52vw);
+  height: auto;
+  opacity: 0;
+  transform: scale(0.92);
+  filter: brightness(1.1) saturate(1.2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash {
+    display: none;
+  }
+}
+
 /* ---- griglia release: respira su tutta la larghezza ---- */
 .release-grid {
   display: grid;
@@ -341,6 +400,7 @@ body::before {
 }
 
 .release-card figure {
+  position: relative;
   aspect-ratio: 1;
   overflow: hidden;
   background: var(--ink-soft);
@@ -362,7 +422,7 @@ body::before {
 
 .release-caption {
   position: absolute;
-  top: 0;
+  bottom: 0;
   left: 0;
   background: var(--ink);
   color: var(--paper);
