@@ -6,9 +6,6 @@ import { RADIO_TRACKS } from "@/lib/releases";
 import { SITE } from "@/lib/site";
 
 /* embed Bandcamp in toni bianchi su fondo ink */
-const smallSrc = (albumId: number) =>
-  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=small/bgcol=231f20/linkcol=e8e8e6/artwork=none/tracklist=false/transparent=true/`;
-
 const largeSrc = (albumId: number) =>
   `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=231f20/linkcol=e8e8e6/tracklist=false/artwork=small/transparent=true/`;
 
@@ -121,6 +118,35 @@ export default function PlayerDrawer() {
     }
   };
 
+  /* desktop: lista "tirabile" — pointer drag sul bordo del box */
+  const deskDrag = useRef<{ y: number; moved: boolean } | null>(null);
+
+  const onBoxPointerDown = (e: React.PointerEvent) => {
+    deskDrag.current = { y: e.clientY, moved: false };
+    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
+  };
+
+  const onBoxPointerMove = (e: React.PointerEvent) => {
+    if (!deskDrag.current) return;
+    const delta = e.clientY - deskDrag.current.y;
+    if (delta < -16 && !panelOpen) {
+      setPanelOpen(true);
+      deskDrag.current.moved = true;
+    } else if (delta > 16 && panelOpen) {
+      setPanelOpen(false);
+      deskDrag.current.moved = true;
+    }
+  };
+
+  const onBoxPointerUp = (e: React.PointerEvent) => {
+    const d = deskDrag.current;
+    deskDrag.current = null;
+    /* tap secco senza drag = toggle (sostituisce il click) */
+    if (d && !d.moved && Math.abs(e.clientY - d.y) < 8) {
+      setPanelOpen((v) => !v);
+    }
+  };
+
   const trackList = (
     <ul className="pp-list">
       {RADIO_TRACKS.map((t, i) => (
@@ -140,8 +166,10 @@ export default function PlayerDrawer() {
 
   return (
     <>
-      {/* desktop: pannello-lista sopra il box, per cambiare traccia */}
-      <div className={`player-panel${panelOpen ? " is-open" : ""}`}>
+      {/* desktop: box nero col player attivo; il pannello-lista vive
+          DENTRO il box, ancorato sopra (bottom: 100%) */}
+      <div className="player-box">
+        <div className={`player-panel${panelOpen ? " is-open" : ""}`}>
         <div className="pp-header">
           <span>bluegold radio · {RADIO_TRACKS.length} tracks</span>
           <button
@@ -153,18 +181,20 @@ export default function PlayerDrawer() {
             ×
           </button>
         </div>
-        {trackList}
-      </div>
-
-      {/* desktop: box nero con barra Bandcamp già attiva */}
-      <div className="player-box">
+          {trackList}
+        </div>
         <button
           className="pb-head"
           aria-expanded={panelOpen}
           aria-label={panelOpen ? "close track list" : "open track list"}
-          onClick={() => setPanelOpen((v) => !v)}
+          onPointerDown={onBoxPointerDown}
+          onPointerMove={onBoxPointerMove}
+          onPointerUp={onBoxPointerUp}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") setPanelOpen((v) => !v);
+          }}
         >
-          <span className="pb-tag">(player)</span>
+          <span className="pb-handle" aria-hidden="true" />
           <span className="pb-track">
             {String(current + 1).padStart(2, "0")}{" "}
             {RADIO_TRACKS[current].title}
@@ -173,7 +203,7 @@ export default function PlayerDrawer() {
         {mountedBox && (
           <div className="pb-embed">
             <iframe
-              src={smallSrc(RADIO_TRACKS[current].albumId)}
+              src={largeSrc(RADIO_TRACKS[current].albumId)}
               title={`bluegold radio — ${RADIO_TRACKS[current].title}`}
               seamless
               allow="autoplay"
@@ -207,7 +237,10 @@ export default function PlayerDrawer() {
               </div>
             </div>
           ) : (
-            <span className="player-label">(player)</span>
+            <span className="player-label">
+              {String(current + 1).padStart(2, "0")}{" "}
+              {RADIO_TRACKS[current].title}
+            </span>
           )}
           <div className="drawer-footer">
             <span className="copyright">©2026</span>

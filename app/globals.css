@@ -257,10 +257,22 @@ button {
   z-index: 60;
   width: 27.2vw;
   min-width: 240px;
-  height: 74px;
+  min-height: 74px;
   background: var(--ink);
   display: block;
   text-align: left;
+}
+
+/* trattino-handle: affordance del drag verso l'alto */
+.pb-handle {
+  display: block;
+  width: 31px;
+  height: 2px;
+  border-radius: 1px;
+  background: rgba(255, 255, 255, 0.35);
+  margin: 0 auto 6px;
+  flex: 0 0 auto;
+  align-self: center;
 }
 
 .player-label {
@@ -275,23 +287,16 @@ button {
 .pb-head {
   width: 100%;
   display: flex;
-  align-items: baseline;
-  gap: 12px;
-  padding: 7px 14px 4px;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 2px;
+  padding: 5px 14px 4px;
+  cursor: grab;
+  touch-action: none;
   font-size: var(--label-size);
   font-weight: var(--w-regular);
   letter-spacing: var(--label-ls);
   text-align: left;
-}
-
-.pb-tag {
-  color: var(--dim-dark);
-  flex-shrink: 0;
-  transition: color 0.2s ease;
-}
-
-.pb-head:hover .pb-tag {
-  color: var(--active-dark);
 }
 
 .pb-track {
@@ -301,23 +306,22 @@ button {
   text-overflow: ellipsis;
 }
 
-/* barra Bandcamp small dentro il box */
+/* player Bandcamp con artwork dentro il box (large, no tracklist) */
 .pb-embed iframe {
   display: block;
   border: 0;
   width: 100%;
-  height: 42px;
+  height: 120px;
 }
 
-/* ---- pannello player desktop, sopra il box ---- */
+/* ---- pannello player desktop: dentro il box, ancorato sopra ---- */
 .player-panel {
-  position: fixed;
+  position: absolute;
   left: 0;
-  bottom: 74px;
-  z-index: 59;
-  width: max(27.2vw, 330px);
+  bottom: 100%;
+  width: 100%;
   background: var(--ink);
-  border-top: 0.5px solid rgba(255, 255, 255, 0.14);
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.14);
   display: none;
   flex-direction: column;
   padding-bottom: 8px;
@@ -325,6 +329,20 @@ button {
 
 .player-panel.is-open {
   display: flex;
+  animation: pp-up 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+@keyframes pp-up {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .player-panel.is-open {
+    animation: none;
+  }
 }
 
 .pp-header {
@@ -421,10 +439,12 @@ button {
 }
 
 .home-socials a {
+  font-weight: var(--w-light);
   transition: opacity 0.2s ease;
 }
 
 .home-socials a:hover {
+  font-weight: var(--w-light);
   opacity: 0.6;
 }
 
