@@ -1,10 +1,20 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import SiteHeader from "@/components/SiteHeader";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-// Zalando Sans Expanded: troppo recente per il manifest di next/font/google
-// in Next 16.2.10 → self-hosted (variabile, wght 200-900, subset latin)
+// Zalando Sans (regular e Expanded): troppo recenti per il manifest
+// di next/font/google → self-hosted (variabili, wght 200-900, latin).
+// Dal PDF: il testo corrente usa la larghezza normale, i display
+// (wordmark, nav, voci menu) usano l'Expanded.
+const zalandoSans = localFont({
+  src: "./fonts/ZalandoSans-Variable.woff2",
+  weight: "200 900",
+  variable: "--font-zalando-sans",
+  display: "swap",
+});
+
 const zalando = localFont({
   src: "./fonts/ZalandoSansExpanded-Variable.woff2",
   weight: "200 900",
@@ -57,7 +67,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a08",
+  themeColor: "#ffffff",
   viewportFit: "cover",
 };
 
@@ -75,13 +85,13 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={zalando.variable}>
+    <html lang="en" className={`${zalandoSans.variable} ${zalando.variable}`}>
       <body>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
-        <div className="grain-layer" aria-hidden="true" />
+        <SiteHeader />
         {children}
       </body>
     </html>

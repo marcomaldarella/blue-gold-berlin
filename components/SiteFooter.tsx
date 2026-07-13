@@ -5,28 +5,25 @@ export default function SiteFooter() {
   return (
     <footer className="site-footer">
       <span>
-        bluegold studios <span className="dot">·</span> berlin{" "}
-        <span className="dot">·</span> <LiveClock />
+        <span className="copyright">©2026</span> · berlin · <LiveClock />
       </span>
       <nav className="footer-links" aria-label="social links">
-        <a href={`mailto:${SITE.email}`} className="u-link">
-          {SITE.email}
+        <a
+          href={SITE.bandcamp}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          bandcamp
         </a>
         <a
           href={SITE.instagram}
           target="_blank"
           rel="noopener noreferrer"
-          className="u-link"
         >
-          {SITE.instagramHandle}
+          instagram
         </a>
-        <a
-          href={SITE.bandcamp}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="u-link"
-        >
-          bandcamp
+        <a href={SITE.ra} target="_blank" rel="noopener noreferrer">
+          resident advisor
         </a>
       </nav>
     </footer>

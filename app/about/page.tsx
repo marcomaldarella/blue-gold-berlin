@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import NavBar from "@/components/NavBar";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import { RADIO_TRACKS } from "@/lib/releases";
@@ -15,7 +14,6 @@ export default function AboutPage() {
   return (
     <main className="page js-entrance">
       <div className="page-inner">
-        <NavBar />
 
         <h1 className="display" data-enter>
           about <span className="dim">— the label</span>

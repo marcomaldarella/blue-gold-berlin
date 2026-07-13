@@ -34,6 +34,8 @@ export default function PageEntrance() {
     const play = () => {
       if (tl) return;
       tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+      /* niente clearProps: il transform inline y:0 deve restare,
+         altrimenti torna il translateY(14px) dello stato iniziale */
       tl.to(targets, {
         opacity: 1,
         y: 0,
@@ -41,7 +43,6 @@ export default function PageEntrance() {
         stagger: 0.09,
         ease: "power3.out",
         delay: 0.15,
-        clearProps: "transform",
       });
     };
 

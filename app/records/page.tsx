@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import NavBar from "@/components/NavBar";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import ReleaseCard from "@/components/ReleaseCard";
@@ -18,7 +17,6 @@ export default function RecordsPage() {
   return (
     <main className="page js-entrance">
       <div className="page-inner">
-        <NavBar />
 
         <h1 className="display" data-enter>
           records <span className="dim">— vinyl &amp; digital</span>

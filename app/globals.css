@@ -1,23 +1,21 @@
 :root {
-  --ink: #0a0a08;
-  --ink-soft: #10100d;
-  --tile: #0d0d0a;
-  --paper: #d8d8c8;
-  --paper-dim: rgba(216, 216, 200, 0.55);
-  --paper-faint: rgba(216, 216, 200, 0.38);
-  --paper-ghost: rgba(216, 216, 200, 0.14);
-  --blue: #6691ff;
-  --blue-soft: #9fc0ff;
-  --blue-dim: #2a5a8a;
-  --gold: #c8a24a;
-  --gold-soft: #e0c27a;
-  --gold-dim: rgba(200, 162, 74, 0.45);
-  --label-bg: #a3a39a;   /* grigio targhetta (dalla cover ar004) */
-  --label-ink: #262624;  /* antracite */
-  --hairline: rgba(216, 216, 200, 0.12);
-  --hairline-soft: rgba(216, 216, 200, 0.06);
-  --font-sans: var(--font-zalando), ui-sans-serif, sans-serif;
-  --font-mono: var(--font-sans), sans-serif; /* extended tutto: niente più mono */
+  /* palette campionata dal PDF bluegoldwax2 */
+  --paper: #ffffff;
+  --ink: #231f20;
+  --hl: #a4a6a9;
+  --overlay: #d7d8d9;
+  --panel: #555253;
+  --green: #00aa4e;
+  --faint: rgba(35, 31, 32, 0.45);
+  --faint-soft: rgba(35, 31, 32, 0.3);
+  --hairline: rgba(35, 31, 32, 0.16);
+  --hairline-soft: rgba(35, 31, 32, 0.08);
+  --tile: #ececec;
+  --font-sans: var(--font-zalando-sans), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-zalando-sans), sans-serif;
+  --font-display: var(--font-zalando), ui-sans-serif, sans-serif;
+  /* gutter contenuti pagine interne */
+  --gutter: clamp(16px, 1.4vw, 26px);
 }
 
 *,
@@ -29,9 +27,9 @@
 }
 
 html {
-  background: var(--ink);
+  background: var(--paper);
   scrollbar-width: thin;
-  scrollbar-color: var(--blue-dim) var(--ink);
+  scrollbar-color: var(--hl) var(--paper);
 }
 
 body {
@@ -41,15 +39,15 @@ body {
   font-size: 14px;
   letter-spacing: -0.01em;
   line-height: 1.47;
-  color: var(--paper);
-  background: var(--ink);
+  color: var(--ink);
+  background: var(--paper);
   min-height: 100svh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
-  background: var(--blue);
+  background: var(--hl);
   color: var(--ink);
 }
 
@@ -71,176 +69,352 @@ button {
   cursor: pointer;
 }
 
-/* full-viewport frame, come nel portfolio */
-body::before {
-  content: "";
+/* =========================================================
+   header — regola ferrea: NO PADDING, NO MARGIN.
+   Le barre grigie abbracciano solo il testo; il wordmark
+   tocca l'angolo (0,0), l'ultima voce nav il bordo destro.
+   ========================================================= */
+.site-header {
   position: fixed;
-  inset: 0;
-  border: 0.7px solid var(--hairline-soft);
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
   pointer-events: none;
-  z-index: 9999;
 }
 
-/* ---- grana pellicola ---- */
-.grain-layer {
+.site-header a,
+.site-header button {
+  pointer-events: auto;
+}
+
+/* wordmark testuale su barra di evidenziazione */
+.wordmark {
+  display: inline-block;
+  background: var(--hl);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 30px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.09;
+  /* il PDF stira il display oltre l'Expanded: misurato 213px
+     di barra a fronte dei 162px resi dal font → scaleX */
+  transform: scaleX(1.33);
+  transform-origin: top left;
+}
+
+/* nav desktop: voci nere su evidenziazione grigia */
+.main-nav {
+  display: flex;
+  gap: 4px;
+  transform: scaleX(1.38);
+  transform-origin: top right;
+}
+
+.main-nav a {
+  background: var(--hl);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.005em;
+  line-height: 1.16;
+  transition: filter 0.2s ease;
+}
+
+.main-nav a:hover,
+.main-nav a:focus-visible,
+.main-nav a.is-active {
+  filter: brightness(0.92);
+}
+
+/* hamburger mobile in box grigio, a filo top-right */
+.menu-toggle {
+  display: none;
+  background: var(--hl);
+  width: 65px;
+  height: 33px;
+  align-items: center;
+  justify-content: center;
+}
+
+.menu-toggle svg {
+  display: block;
+  stroke: var(--ink);
+  stroke-width: 2.2;
+}
+
+/* =========================================================
+   menu mobile: overlay grigio chiaro pieno (pagina 4)
+   ========================================================= */
+.menu-overlay {
   position: fixed;
-  inset: -60px;
-  pointer-events: none;
+  inset: 0;
   z-index: 90;
-  opacity: 0.3;
-  mix-blend-mode: soft-light;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation: grain-move 12s steps(10) infinite;
+  background: var(--overlay);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 56px;
 }
 
-@keyframes grain-move {
-  0% { transform: translate(0, 0); }
-  20% { transform: translate(-24px, 12px); }
-  40% { transform: translate(18px, -20px); }
-  60% { transform: translate(-12px, -14px); }
-  80% { transform: translate(22px, 18px); }
-  100% { transform: translate(0, 0); }
+.menu-overlay nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 21px;
+  transform: scaleX(1.37);
+  transform-origin: center;
 }
 
-/* ---- sfondo home ---- */
-.bg-photo {
+.menu-overlay nav a {
+  background: var(--hl);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 650;
+  letter-spacing: -0.01em;
+  line-height: 1.08;
+}
+
+.menu-overlay-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 12px 8px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.menu-overlay-footer .copyright {
+  color: var(--hl);
+}
+
+.menu-overlay-footer .socials {
+  display: flex;
+  gap: 16px;
+  color: var(--ink);
+}
+
+/* =========================================================
+   home (pagina 1): tagline centrata, angoli a filo
+   ========================================================= */
+.home {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tagline {
+  text-align: center;
+  color: var(--ink);
+  /* dal PDF: glifi Expanded ma spazi-parola stretti */
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 400;
+  letter-spacing: -0.005em;
+  word-spacing: -7px;
+  line-height: 1.18;
+  padding: 0 16px;
+}
+
+/* box player desktop: nero, a filo dell'angolo basso-sinistra */
+.player-box {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  z-index: 60;
+  width: 27.2vw;
+  min-width: 240px;
+  height: 74px;
+  background: var(--ink);
+  display: block;
+}
+
+.player-box .player-label {
+  position: absolute;
+  left: 55px;
+  top: 13px;
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.045em;
+  transition: opacity 0.2s ease;
+}
+
+.player-box:hover .player-label {
+  opacity: 0.75;
+}
+
+/* social row desktop: basso a destra */
+.home-socials {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 60;
+  display: flex;
+  gap: 28px;
+  padding: 0 13px 12px 0;
+  font-size: 11.5px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  color: var(--ink);
+}
+
+.home-socials a {
+  transition: opacity 0.2s ease;
+}
+
+.home-socials a:hover {
+  opacity: 0.6;
+}
+
+/* =========================================================
+   drawer player mobile (pagine 2-3): barra nera col
+   trattino sempre visibile, pannello grigio che sale
+   ========================================================= */
+.player-drawer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  display: none;
+  flex-direction: column;
+}
+
+.drawer-handle {
+  width: 100%;
+  height: 21px;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  touch-action: none;
+}
+
+.drawer-handle::after {
+  content: "";
+  width: 31px;
+  height: 2px;
+  background: #ffffff;
+}
+
+.drawer-panel {
+  background: var(--panel);
+  height: 87px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-panel .player-label {
+  color: var(--green);
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.045em;
+  margin-bottom: 14px;
+}
+
+.drawer-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  padding: 8px 8px;
+  font-size: 11px;
+  font-weight: 400;
+}
+
+.drawer-footer .copyright {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.drawer-footer .socials {
+  display: flex;
+  gap: 14px;
+  color: #ffffff;
+}
+
+/* =========================================================
+   splash: bianca, wordmark evidenziato che appare e svanisce
+   ========================================================= */
+.splash {
   position: fixed;
   inset: 0;
-  z-index: -2;
-  background: var(--ink) url("/assets/landing-bg.jpg") center/cover no-repeat;
+  z-index: 9990;
+  background: var(--paper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.bg-photo::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(10, 10, 8, 0.42) 0%,
-    rgba(10, 10, 8, 0.68) 55%,
-    rgba(10, 10, 8, 0.9) 100%
-  );
+.splash .wordmark {
+  font-size: clamp(38px, 7vw, 84px);
+  opacity: 0;
+  transform-origin: center;
 }
 
-/* ---- struttura pagina: full-bleed, gutter costanti ---- */
+@media (prefers-reduced-motion: reduce) {
+  .splash {
+    display: none;
+  }
+}
+
+/* =========================================================
+   pagine interne
+   ========================================================= */
 .page {
   min-height: 100svh;
   display: flex;
   flex-direction: column;
-  padding: clamp(16px, 1.4vw, 26px);
+  padding: var(--gutter);
   /* compensa l'altezza dell'header fixed */
-  padding-top: clamp(88px, 12vh, 128px);
-  padding-bottom: 112px;
+  padding-top: clamp(72px, 10vh, 110px);
+  padding-bottom: 96px;
 }
 
 .page-inner {
   width: 100%;
 }
 
-/* ---- titolo display, alla studio dumbar ---- */
+/* titolo display */
 .display {
+  font-family: var(--font-display);
   font-size: clamp(44px, 8vw, 120px);
   font-weight: 300;
   letter-spacing: -0.03em;
   line-height: 0.94;
-  color: var(--paper);
-  margin: clamp(16px, 3vh, 40px) 0 clamp(28px, 5vh, 64px);
+  color: var(--ink);
+  margin: clamp(8px, 2vh, 24px) 0 clamp(28px, 5vh, 64px);
 }
 
 .display .dim {
-  color: var(--paper-faint);
+  color: var(--faint-soft);
 }
 
-/* ---- header: fixed in alto durante lo scroll ---- */
-.site-header {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 30;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-  padding: clamp(16px, 1.4vw, 26px);
-  pointer-events: none;
-}
-
-.site-header a {
-  pointer-events: auto;
-}
-
-.brand-box {
-  display: inline-flex;
-  flex-direction: column;
-  gap: 2px;
-  background: var(--label-bg);
-  color: var(--label-ink);
-  border: 0.5px solid transparent;
-  padding: 0.35rem 0.55rem;
-  font-size: 12px;
-  font-weight: 300;
-  letter-spacing: -0.005em;
-  line-height: 1.3;
-}
-
-.brand-box em {
-  font-style: normal;
-  font-family: var(--font-mono);
-  font-size: 9px;
-  font-weight: 400;
-  letter-spacing: 0.06em;
-  color: rgba(38, 38, 36, 0.6);
-}
-
-.brand-box:hover em {
-  color: var(--gold);
-  transition: color 0.25s ease;
-}
-
-.main-menu {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-  justify-content: flex-end;
-}
-
-.nav-link {
-  position: relative;
-  background: var(--label-bg);
-  border: 0.5px solid transparent;
-  padding: 0.3rem 0.5rem;
-  font-size: 12px;
-  font-weight: 400;
-  letter-spacing: -0.005em;
-  color: rgba(38, 38, 36, 0.66);
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-
-.nav-link:hover {
-  color: var(--label-ink);
-}
-
-.nav-link.is-active {
-  color: var(--label-ink);
-  border-color: var(--label-ink);
-}
-
-.nav-link.is-external {
-  color: rgba(38, 38, 36, 0.55);
-}
-
-.nav-link.is-external:hover {
-  color: var(--label-ink);
-}
-
-/* ---- label / eyebrow: minuscolo, mai maiuscolo ---- */
+/* label / eyebrow: minuscolo, mai maiuscolo */
 .eyebrow {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: var(--paper-faint);
+  color: var(--faint);
 }
 
 .section-header {
@@ -257,7 +431,7 @@ body::before {
   background: var(--hairline-soft);
 }
 
-/* ---- link con underline che cresce da sinistra ---- */
+/* link con underline che cresce da sinistra */
 .u-link {
   position: relative;
   display: inline-block;
@@ -281,99 +455,11 @@ body::before {
   transform: scaleX(1);
 }
 
-/* ---- hero home ---- */
-.hero {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: clamp(20px, 4vh, 36px);
-  min-height: 52svh;
-  text-align: center;
-}
-
-.hero-logo-wrap {
-  position: relative;
-  display: flex;
-  justify-content: center;
-}
-
-.hero-glow {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 66%;
-  height: 66%;
-  transform: translate(-50%, -50%);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(102, 145, 255, 0.5) 0%,
-    rgba(200, 162, 74, 0.12) 46%,
-    rgba(102, 145, 255, 0) 72%
-  );
-  filter: blur(46px);
-  pointer-events: none;
-}
-
-.hero-logo {
-  position: relative;
-  width: min(560px, 68vw);
-  max-height: 46svh;
-  object-fit: contain;
-  filter: brightness(1.1) saturate(1.2);
-}
-
-.hero-lines {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  font-size: clamp(12px, 1.2vw, 16px);
-  font-weight: 250; /* light vero */
-  letter-spacing: -0.01em;
-  line-height: 1.25; /* interlinea stretta */
-  color: var(--paper-dim);
-}
-
-.hero-lines strong {
-  font-weight: 320;
-  color: var(--paper);
-}
-
-
-
-
-/* ---- splash d'ingresso ---- */
-.splash {
-  position: fixed;
-  inset: 0;
-  z-index: 9990;
-  background: var(--ink);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.splash img {
-  width: min(300px, 52vw);
-  height: auto;
-  opacity: 0;
-  transform: scale(0.92);
-  filter: brightness(1.1) saturate(1.2);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .splash {
-    display: none;
-  }
-}
-
-/* ---- griglia release: respira su tutta la larghezza ---- */
+/* ---- griglia release ---- */
 .release-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(clamp(250px, 23vw, 400px), 1fr));
-  gap: clamp(16px, 1.4vw, 26px);
+  gap: var(--gutter);
 }
 
 .release-card {
@@ -388,16 +474,14 @@ body::before {
   position: relative;
   aspect-ratio: 1;
   overflow: hidden;
-  background: var(--ink-soft);
-  /* confina i blend delle caption dentro l'artwork */
-  isolation: isolate;
+  background: var(--tile);
 }
 
 .release-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  filter: saturate(0.92);
+  filter: saturate(0.95);
   transform: scale(1.001);
   transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
 }
@@ -407,28 +491,23 @@ body::before {
   filter: saturate(1.05);
 }
 
-/* caption a targhetta, come la banda grigia della cover ar004:
-   antracite su grigio, in basso a sinistra, senza blend */
+/* caption a targhetta: antracite su grigio evidenziazione,
+   la barra abbraccia solo il testo, a filo dell'angolo */
 .release-caption {
   position: absolute;
-  bottom: clamp(8px, 1vw, 14px);
+  bottom: 0;
   left: 0;
-  padding: 0.28em 0.55em;
   max-width: 94%;
-  background: var(--label-bg);
-  font-weight: 300;
-  font-size: clamp(15px, 1.5vw, 22px);
-  letter-spacing: -0.02em;
-  line-height: 1.05;
+  background: var(--hl);
+  color: var(--ink);
+  font-weight: 500;
+  font-size: clamp(14px, 1.4vw, 20px);
+  letter-spacing: -0.01em;
+  line-height: 1.15;
 }
 
-.release-caption .cap-text {
-  position: relative;
-  color: var(--label-ink);
-}
-
-.release-caption .cap-text span {
-  opacity: 0.62;
+.release-caption span {
+  color: rgba(35, 31, 32, 0.6);
 }
 
 .release-meta {
@@ -442,27 +521,26 @@ body::before {
   font-size: 10px;
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: var(--paper-faint);
+  color: var(--faint);
 }
 
-.release-meta .cat { color: var(--gold-dim); }
-.release-card:hover .cat { color: var(--gold); }
-.release-meta .buy { color: var(--blue-dim); transition: color 0.2s ease; }
-.release-card:hover .buy { color: var(--blue); }
+.release-meta .cat { color: var(--ink); }
+.release-meta .buy { color: var(--green); transition: opacity 0.2s ease; }
+.release-card:hover .buy { opacity: 0.7; }
 
 /* ---- righe eventi ---- */
 .event-row {
   display: grid;
   grid-template-columns: clamp(72px, 8vw, 120px) minmax(0, 1fr) auto;
   align-items: center;
-  gap: clamp(16px, 1.4vw, 26px);
+  gap: var(--gutter);
   padding: clamp(16px, 2.2vh, 24px) 0;
-  border-bottom: 0.5px solid var(--hairline-soft);
+  border-bottom: 0.5px solid var(--hairline);
   transition: background 0.3s ease;
 }
 
 a.event-row:hover {
-  background: rgba(216, 216, 200, 0.015);
+  background: rgba(35, 31, 32, 0.03);
 }
 
 .event-date {
@@ -470,12 +548,12 @@ a.event-row:hover {
   font-size: clamp(11px, 1vw, 13px);
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: var(--paper-faint);
+  color: var(--faint);
 }
 
 .event-title {
   font-size: clamp(16px, 1.8vw, 26px);
-  font-weight: 300;
+  font-weight: 500;
   letter-spacing: -0.02em;
   white-space: nowrap;
   overflow: hidden;
@@ -486,7 +564,7 @@ a.event-row:hover {
   font-family: var(--font-mono);
   font-size: clamp(10px, 0.9vw, 12px);
   letter-spacing: 0.03em;
-  color: var(--paper-faint);
+  color: var(--faint);
   margin-top: 4px;
   white-space: nowrap;
   overflow: hidden;
@@ -497,13 +575,13 @@ a.event-row:hover {
   font-family: var(--font-mono);
   font-size: clamp(10px, 0.9vw, 12px);
   letter-spacing: 0.04em;
-  color: var(--gold-dim);
+  color: var(--faint);
   margin-top: 4px;
 }
 
 .event-price {
   font-size: clamp(15px, 1.5vw, 21px);
-  font-weight: 300;
+  font-weight: 500;
   text-align: right;
 }
 
@@ -512,22 +590,22 @@ a.event-row:hover {
   font-size: clamp(10px, 0.9vw, 12px);
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: var(--blue-dim);
+  color: var(--green);
   margin-top: 3px;
   text-align: right;
-  transition: color 0.2s ease;
+  transition: opacity 0.2s ease;
 }
 
 a.event-row:hover .event-buy {
-  color: var(--blue);
+  opacity: 0.7;
 }
 
 .event-row.sold-out {
-  opacity: 0.4;
+  opacity: 0.45;
 }
 
 .event-row.sold-out .event-price {
-  color: var(--gold-dim);
+  color: var(--faint);
   font-size: 11px;
 }
 
@@ -543,7 +621,7 @@ a.event-row:hover .event-buy {
   font-size: clamp(15px, 1.5vw, 22px);
   letter-spacing: -0.015em;
   line-height: 1.42;
-  color: var(--paper-dim);
+  color: rgba(35, 31, 32, 0.75);
   max-width: 46ch;
 }
 
@@ -552,8 +630,8 @@ a.event-row:hover .event-buy {
 }
 
 .about-bio strong {
-  font-weight: 300;
-  color: var(--paper);
+  font-weight: 500;
+  color: var(--ink);
 }
 
 .contact-list {
@@ -571,13 +649,13 @@ a.event-row:hover .event-buy {
   font-size: clamp(10px, 0.9vw, 12px);
   font-weight: 400;
   letter-spacing: 0.05em;
-  color: var(--paper-faint);
+  color: var(--faint);
 }
 
 .radio-list {
   list-style: none;
   border: 0.5px solid var(--hairline-soft);
-  background: var(--ink-soft);
+  background: var(--tile);
 }
 
 .radio-item {
@@ -589,7 +667,7 @@ a.event-row:hover .event-buy {
   font-size: 10px;
   font-weight: 400;
   letter-spacing: 0.04em;
-  color: var(--paper-dim);
+  color: rgba(35, 31, 32, 0.7);
   border-bottom: 0.5px solid var(--hairline-soft);
   transition: color 0.2s ease, background 0.2s ease;
 }
@@ -599,22 +677,22 @@ a.event-row:hover .event-buy {
 }
 
 a.radio-item:hover {
-  color: var(--blue-soft);
-  background: rgba(102, 145, 255, 0.04);
+  color: var(--ink);
+  background: rgba(0, 170, 78, 0.07);
 }
 
 .radio-item .num {
-  color: var(--blue-dim);
+  color: var(--green);
   flex-shrink: 0;
 }
 
 .radio-item .cat {
   margin-left: auto;
-  color: var(--gold-dim);
+  color: var(--faint);
   flex-shrink: 0;
 }
 
-/* ---- footer ---- */
+/* ---- footer pagine interne ---- */
 .site-footer {
   position: fixed;
   bottom: 0;
@@ -622,34 +700,34 @@ a.radio-item:hover {
   right: 0;
   z-index: 20;
   display: flex;
-  align-items: center;
+  align-items: baseline;
   justify-content: space-between;
   gap: 12px;
-  padding: 10px clamp(16px, 1.4vw, 26px);
-  background: linear-gradient(180deg, rgba(10, 10, 8, 0) 0%, rgba(10, 10, 8, 0.88) 45%);
+  padding: 10px var(--gutter);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.92) 45%);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 400;
-  letter-spacing: 0.05em;
-  color: var(--paper-faint);
+  letter-spacing: 0.03em;
+  color: var(--faint);
 }
 
-.site-footer .dot {
-  color: var(--gold-dim);
+.site-footer .copyright {
+  color: var(--hl);
 }
 
 .footer-links {
   display: flex;
-  gap: 14px;
+  gap: 16px;
 }
 
 .footer-links a {
-  color: var(--paper-faint);
-  transition: color 0.2s ease;
+  color: var(--ink);
+  transition: opacity 0.2s ease;
 }
 
 .footer-links a:hover {
-  color: var(--paper);
+  opacity: 0.6;
 }
 
 /* ---- entrance (stati iniziali gestiti da GSAP) ---- */
@@ -663,14 +741,38 @@ a.radio-item:hover {
     opacity: 1;
     transform: none;
   }
-
-  .grain-layer {
-    animation: none;
-  }
 }
 
-/* ---- responsive ---- */
+/* =========================================================
+   responsive
+   ========================================================= */
 @media (max-width: 720px) {
+  .wordmark {
+    font-size: 30px;
+  }
+
+  .main-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+  }
+
+  .player-box,
+  .home-socials {
+    display: none;
+  }
+
+  .player-drawer {
+    display: flex;
+  }
+
+  /* la tagline non deve finire sotto la barra handler */
+  .home {
+    padding-bottom: 21px;
+  }
+
   .about-grid {
     grid-template-columns: 1fr;
   }
@@ -678,10 +780,6 @@ a.radio-item:hover {
   .event-row {
     grid-template-columns: 48px minmax(0, 1fr) auto;
     gap: 8px;
-  }
-
-  .hero-logo {
-    width: min(340px, 76vw);
   }
 
   .site-footer {

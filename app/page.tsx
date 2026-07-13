@@ -1,40 +1,35 @@
-import Image from "next/image";
-import Link from "next/link";
-import NavBar from "@/components/NavBar";
-import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
+import PlayerDrawer from "@/components/PlayerDrawer";
 import SplashScreen from "@/components/SplashScreen";
+import { SITE } from "@/lib/site";
 
 export default function HomePage() {
   return (
-    <main className="page js-entrance">
+    <main className="home js-entrance">
       <SplashScreen />
-      <div className="bg-photo" aria-hidden="true" />
-      <div className="page-inner">
-        <NavBar />
 
-        <section className="hero" aria-label="intro">
-          <div className="hero-logo-wrap" data-enter>
-            <div className="hero-glow" aria-hidden="true" />
-            <Image
-              className="hero-logo"
-              src="/assets/bluegold-blue.png"
-              alt="Bluegold"
-              width={928}
-              height={928}
-              priority
-            />
-          </div>
-          <div className="hero-lines" data-enter>
-            <p>
-              <strong>bluegold studios</strong> — record label &amp; studio,
-              berlin
-            </p>
-            <p>sound design for altered states of mind · founded by mruda</p>
-          </div>
-        </section>
-      </div>
-      <SiteFooter />
+      <p className="tagline" data-enter>
+        Sound design for altered states of mind
+        <br />
+        Record label &amp; studio based in berlin,
+        <br />
+        Founded by mruda
+      </p>
+
+      <PlayerDrawer />
+
+      <nav className="home-socials" aria-label="social links" data-enter>
+        <a href={SITE.bandcamp} target="_blank" rel="noopener noreferrer">
+          bandcamp
+        </a>
+        <a href={SITE.instagram} target="_blank" rel="noopener noreferrer">
+          instagram
+        </a>
+        <a href={SITE.ra} target="_blank" rel="noopener noreferrer">
+          resident advisor
+        </a>
+      </nav>
+
       <PageEntrance />
     </main>
   );

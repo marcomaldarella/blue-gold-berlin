@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import NavBar from "@/components/NavBar";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import { EVENTS, HOST_ORDER } from "@/lib/events";
@@ -15,7 +14,6 @@ export default function EventsPage() {
   return (
     <main className="page js-entrance">
       <div className="page-inner">
-        <NavBar />
 
         <h1 className="display" data-enter>
           events <span className="dim">— berlin</span>
