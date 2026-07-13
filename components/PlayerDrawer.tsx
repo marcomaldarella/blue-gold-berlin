@@ -5,28 +5,31 @@ import gsap from "gsap";
 import { RADIO_TRACKS } from "@/lib/releases";
 import { SITE } from "@/lib/site";
 
-/* embed Bandcamp come su bgwax.com, ricolorato per il redesign */
-const embedSrc = (albumId: number) =>
-  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=231f20/linkcol=00aa4e/tracklist=false/artwork=small/transparent=true/`;
+/* embed Bandcamp in toni bianchi su fondo ink */
+const smallSrc = (albumId: number) =>
+  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=small/bgcol=231f20/linkcol=e8e8e6/artwork=none/tracklist=false/transparent=true/`;
+
+const largeSrc = (albumId: number) =>
+  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=231f20/linkcol=e8e8e6/tracklist=false/artwork=small/transparent=true/`;
 
 /**
- * Player reale della home:
- * - desktop: click sul box nero "(player)" → pannello scuro sopra
- *   il box con lista bluegold radio (01-05) + iframe Bandcamp;
- * - mobile: lista + iframe dentro il pannello del drawer esistente.
- * REGOLA PERFORMANCE: l'iframe si monta solo alla prima apertura
- * (mai al load); dopo resta montato così l'audio prosegue anche a
- * pannello chiuso. Supporta /?track=N (dalle righe radio in about).
+ * Player della home:
+ * - desktop: il box nero in basso a sinistra contiene direttamente
+ *   la barra Bandcamp small (42px) già attiva, montata a idle dopo
+ *   il first paint (niente click, niente peso sull'LCP). Il click
+ *   sulla testata del box apre il pannello con la lista dei 5
+ *   brani per cambiare traccia — un solo iframe su desktop;
+ * - mobile: pattern del drawer dal PDF, lista + embed large dentro
+ *   il pannello, montati alla prima apertura.
+ * Supporta /?track=N (dalle righe radio in about).
  */
 export default function PlayerDrawer() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const openRef = useRef(false);
   const [open, setOpen] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false); // desktop
-  /* lazy: ogni superficie monta il proprio iframe solo alla
-     prima apertura, così non esistono embed doppi */
-  const [mountedPanel, setMountedPanel] = useState(false);
+  const [panelOpen, setPanelOpen] = useState(false); // lista desktop
+  const [mountedBox, setMountedBox] = useState(false); // barra small
   const [mountedDrawer, setMountedDrawer] = useState(false);
   const [current, setCurrent] = useState(0);
 
@@ -53,13 +56,7 @@ export default function PlayerDrawer() {
     requestAnimationFrame(apply);
   };
 
-  const togglePanel = (next?: boolean) => {
-    const v = next ?? !panelOpen;
-    setPanelOpen(v);
-    if (v) setMountedPanel(true);
-  };
-
-  /* stato iniziale: drawer chiuso; /?track=N apre il player */
+  /* stato iniziale: drawer chiuso; /?track=N apre lista/drawer */
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const t = params.get("track");
@@ -68,13 +65,27 @@ export default function PlayerDrawer() {
     if (valid) setCurrent(idx);
 
     const isMobile = window.matchMedia("(max-width: 720px)").matches;
-    if (valid && !isMobile) togglePanel(true);
+    if (valid && !isMobile) setPanelOpen(true);
     setDrawer(Boolean(valid && isMobile), false);
 
     const onResize = () => setDrawer(openRef.current, false);
     window.addEventListener("resize", onResize);
     return () => window.removeEventListener("resize", onResize);
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /* desktop: la barra small appare da sola subito dopo il first
+     paint (requestIdleCallback, fallback timeout) */
+  useEffect(() => {
+    const isMobile = window.matchMedia("(max-width: 720px)").matches;
+    if (isMobile) return;
+    const cb = () => setMountedBox(true);
+    if ("requestIdleCallback" in window) {
+      const id = window.requestIdleCallback(cb, { timeout: 1500 });
+      return () => window.cancelIdleCallback(id);
+    }
+    const t = setTimeout(cb, 300);
+    return () => clearTimeout(t);
   }, []);
 
   /* drag dell'handler: segue il dito, poi snap open/closed */
@@ -127,45 +138,49 @@ export default function PlayerDrawer() {
     </ul>
   );
 
-  const embed = (
-    <div className="pp-embed">
-      <iframe
-        src={embedSrc(RADIO_TRACKS[current].albumId)}
-        title={`bluegold radio — ${RADIO_TRACKS[current].title}`}
-        seamless
-        allow="autoplay"
-      />
-    </div>
-  );
-
   return (
     <>
-      {/* desktop: pannello sopra il box */}
+      {/* desktop: pannello-lista sopra il box, per cambiare traccia */}
       <div className={`player-panel${panelOpen ? " is-open" : ""}`}>
         <div className="pp-header">
           <span>bluegold radio · {RADIO_TRACKS.length} tracks</span>
           <button
             className="pp-close"
-            aria-label="close player"
-            onClick={() => togglePanel(false)}
+            aria-label="close track list"
+            onClick={() => setPanelOpen(false)}
             tabIndex={panelOpen ? 0 : -1}
           >
             ×
           </button>
         </div>
         {trackList}
-        {mountedPanel && embed}
       </div>
 
-      {/* desktop: box nero bottom-left, identico da chiuso */}
-      <button
-        className="player-box"
-        aria-expanded={panelOpen}
-        aria-label={panelOpen ? "close player" : "open player"}
-        onClick={() => togglePanel()}
-      >
-        <span className="player-label">(player)</span>
-      </button>
+      {/* desktop: box nero con barra Bandcamp già attiva */}
+      <div className="player-box">
+        <button
+          className="pb-head"
+          aria-expanded={panelOpen}
+          aria-label={panelOpen ? "close track list" : "open track list"}
+          onClick={() => setPanelOpen((v) => !v)}
+        >
+          <span className="pb-tag">(player)</span>
+          <span className="pb-track">
+            {String(current + 1).padStart(2, "0")}{" "}
+            {RADIO_TRACKS[current].title}
+          </span>
+        </button>
+        {mountedBox && (
+          <div className="pb-embed">
+            <iframe
+              src={smallSrc(RADIO_TRACKS[current].albumId)}
+              title={`bluegold radio — ${RADIO_TRACKS[current].title}`}
+              seamless
+              allow="autoplay"
+            />
+          </div>
+        )}
+      </div>
 
       {/* mobile: drawer col trattino */}
       <div className="player-drawer" ref={drawerRef}>
@@ -182,7 +197,14 @@ export default function PlayerDrawer() {
           {mountedDrawer ? (
             <div className="drawer-player">
               {trackList}
-              {embed}
+              <div className="pp-embed">
+                <iframe
+                  src={largeSrc(RADIO_TRACKS[current].albumId)}
+                  title={`bluegold radio — ${RADIO_TRACKS[current].title}`}
+                  seamless
+                  allow="autoplay"
+                />
+              </div>
             </div>
           ) : (
             <span className="player-label">(player)</span>

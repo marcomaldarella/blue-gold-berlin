@@ -5,7 +5,9 @@
   --hl: #a4a6a9;
   --overlay: #d7d8d9;
   --panel: #555253;
-  --green: #00aa4e;
+  /* niente colori d'accento: solo bianco/nero/grigi */
+  --active-dark: #e8e8e6;
+  --dim-dark: #8a8a88;
   --faint: rgba(35, 31, 32, 0.45);
   --faint-soft: rgba(35, 31, 32, 0.3);
   --hairline: rgba(35, 31, 32, 0.16);
@@ -261,22 +263,50 @@ button {
   text-align: left;
 }
 
-.player-box .player-label {
-  position: absolute;
-  left: 55px;
-  top: 13px;
-}
-
 .player-label {
-  color: var(--green);
+  color: var(--active-dark);
   font-size: var(--text-m);
   font-weight: var(--w-regular);
   letter-spacing: var(--label-ls);
   transition: opacity 0.2s ease;
 }
 
-.player-box:hover .player-label {
-  opacity: 0.75;
+/* testata del box: (player) + traccia corrente, apre la lista */
+.pb-head {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 7px 14px 4px;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
+  text-align: left;
+}
+
+.pb-tag {
+  color: var(--dim-dark);
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.pb-head:hover .pb-tag {
+  color: var(--active-dark);
+}
+
+.pb-track {
+  color: var(--active-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* barra Bandcamp small dentro il box */
+.pb-embed iframe {
+  display: block;
+  border: 0;
+  width: 100%;
+  height: 42px;
 }
 
 /* ---- pannello player desktop, sopra il box ---- */
@@ -338,7 +368,7 @@ button {
 }
 
 .pp-item .num {
-  color: var(--green);
+  color: var(--dim-dark);
   flex-shrink: 0;
 }
 
@@ -360,8 +390,8 @@ button {
 }
 
 .pp-item.is-current {
-  color: #ffffff;
-  background: rgba(0, 170, 78, 0.12);
+  color: var(--active-dark);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .pp-embed {
@@ -640,7 +670,7 @@ button {
 }
 
 .release-meta .cat { color: var(--ink); }
-.release-meta .buy { color: var(--green); transition: opacity 0.2s ease; }
+.release-meta .buy { color: var(--ink); transition: opacity 0.2s ease; }
 .release-card:hover .buy { opacity: 0.7; }
 
 /* ---- righe eventi ---- */
@@ -706,7 +736,7 @@ a.event-row:hover {
 }
 
 .event-buy {
-  color: var(--green);
+  color: var(--ink);
   margin-top: 3px;
   text-align: right;
   transition: opacity 0.2s ease;
@@ -805,11 +835,11 @@ li:last-child > .radio-item {
 a.radio-item:hover,
 button.radio-item:hover {
   color: var(--ink);
-  background: rgba(0, 170, 78, 0.07);
+  background: rgba(35, 31, 32, 0.05);
 }
 
 .radio-item .num {
-  color: var(--green);
+  color: var(--ink);
   flex-shrink: 0;
 }
 
