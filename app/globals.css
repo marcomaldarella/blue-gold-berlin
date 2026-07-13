@@ -11,9 +11,24 @@
   --hairline: rgba(35, 31, 32, 0.16);
   --hairline-soft: rgba(35, 31, 32, 0.08);
   --tile: #ececec;
+
+  /* ============ sistema tipografico unico ============
+     display → Zalando Sans Expanded (scaleX SOLO su
+       wordmark, voci nav, voci menu mobile)
+     body    → Zalando Sans regular, scala 13/15/17
+     label   → meta/etichette: 11px, ls 0.04em, regular
+     pesi ammessi: 300 (light) e 400 (regular)          */
   --font-sans: var(--font-zalando-sans), ui-sans-serif, sans-serif;
   --font-mono: var(--font-zalando-sans), sans-serif;
   --font-display: var(--font-zalando), ui-sans-serif, sans-serif;
+  --w-light: 300;
+  --w-regular: 400;
+  --text-s: 13px;
+  --text-m: 15px;
+  --text-l: 17px;
+  --label-size: 11px;
+  --label-ls: 0.04em;
+
   /* gutter contenuti pagine interne */
   --gutter: clamp(16px, 1.4vw, 26px);
 }
@@ -35,9 +50,9 @@ html {
 body {
   font-variant-numeric: tabular-nums;
   font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 14px;
-  letter-spacing: -0.01em;
+  font-weight: var(--w-regular);
+  font-size: var(--text-s);
+  letter-spacing: -0.005em;
   line-height: 1.47;
   color: var(--ink);
   background: var(--paper);
@@ -69,10 +84,18 @@ button {
   cursor: pointer;
 }
 
+/* classe label: unica per eyebrow, meta, date, clock, footer */
+.label,
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
+  color: var(--faint);
+}
+
 /* =========================================================
-   header — regola ferrea: NO PADDING, NO MARGIN.
-   Le barre grigie abbracciano solo il testo; il wordmark
-   tocca l'angolo (0,0), l'ultima voce nav il bordo destro.
+   header — NO PADDING, NO MARGIN: barre a filo dei bordi
    ========================================================= */
 .site-header {
   position: fixed;
@@ -91,23 +114,20 @@ button {
   pointer-events: auto;
 }
 
-/* wordmark testuale su barra di evidenziazione */
 .wordmark {
   display: inline-block;
   background: var(--hl);
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 30px;
-  font-weight: 600;
+  font-weight: var(--w-regular);
   letter-spacing: -0.01em;
   line-height: 1.09;
-  /* il PDF stira il display oltre l'Expanded: misurato 213px
-     di barra a fronte dei 162px resi dal font → scaleX */
+  /* il PDF stira il display oltre l'Expanded (misurato) */
   transform: scaleX(1.33);
   transform-origin: top left;
 }
 
-/* nav desktop: voci nere su evidenziazione grigia */
 .main-nav {
   display: flex;
   gap: 4px;
@@ -120,7 +140,7 @@ button {
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: var(--w-regular);
   letter-spacing: -0.005em;
   line-height: 1.16;
   transition: filter 0.2s ease;
@@ -132,7 +152,6 @@ button {
   filter: brightness(0.92);
 }
 
-/* hamburger mobile in box grigio, a filo top-right */
 .menu-toggle {
   display: none;
   background: var(--hl);
@@ -149,7 +168,7 @@ button {
 }
 
 /* =========================================================
-   menu mobile: overlay grigio chiaro pieno (pagina 4)
+   menu mobile: overlay grigio chiaro pieno
    ========================================================= */
 .menu-overlay {
   position: fixed;
@@ -177,7 +196,7 @@ button {
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 26px;
-  font-weight: 650;
+  font-weight: var(--w-regular);
   letter-spacing: -0.01em;
   line-height: 1.08;
 }
@@ -191,9 +210,8 @@ button {
   align-items: baseline;
   justify-content: space-between;
   padding: 12px 8px;
-  font-size: 11px;
-  font-weight: 400;
-  letter-spacing: 0.01em;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-ls);
 }
 
 .menu-overlay-footer .copyright {
@@ -207,7 +225,7 @@ button {
 }
 
 /* =========================================================
-   home (pagina 1): tagline centrata, angoli a filo
+   home: tagline centrata, angoli a filo
    ========================================================= */
 .home {
   min-height: 100svh;
@@ -221,8 +239,8 @@ button {
   color: var(--ink);
   /* dal PDF: glifi Expanded ma spazi-parola stretti */
   font-family: var(--font-display);
-  font-size: 13px;
-  font-weight: 400;
+  font-size: var(--text-s);
+  font-weight: var(--w-regular);
   letter-spacing: -0.005em;
   word-spacing: -7px;
   line-height: 1.18;
@@ -240,21 +258,121 @@ button {
   height: 74px;
   background: var(--ink);
   display: block;
+  text-align: left;
 }
 
 .player-box .player-label {
   position: absolute;
   left: 55px;
   top: 13px;
+}
+
+.player-label {
   color: var(--green);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.045em;
+  font-size: var(--text-m);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
   transition: opacity 0.2s ease;
 }
 
 .player-box:hover .player-label {
   opacity: 0.75;
+}
+
+/* ---- pannello player desktop, sopra il box ---- */
+.player-panel {
+  position: fixed;
+  left: 0;
+  bottom: 74px;
+  z-index: 59;
+  width: max(27.2vw, 330px);
+  background: var(--ink);
+  border-top: 0.5px solid rgba(255, 255, 255, 0.14);
+  display: none;
+  flex-direction: column;
+  padding-bottom: 8px;
+}
+
+.player-panel.is-open {
+  display: flex;
+}
+
+.pp-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px 6px;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.pp-close {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: var(--text-m);
+  line-height: 1;
+  transition: color 0.2s ease;
+}
+
+.pp-close:hover {
+  color: #ffffff;
+}
+
+.pp-list {
+  list-style: none;
+}
+
+.pp-item {
+  width: 100%;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 14px;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
+  color: rgba(255, 255, 255, 0.65);
+  text-align: left;
+  transition: color 0.2s ease, background 0.2s ease;
+}
+
+.pp-item .num {
+  color: var(--green);
+  flex-shrink: 0;
+}
+
+.pp-item .title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pp-item .cat {
+  color: rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.pp-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.pp-item.is-current {
+  color: #ffffff;
+  background: rgba(0, 170, 78, 0.12);
+}
+
+.pp-embed {
+  margin-top: 6px;
+}
+
+.pp-embed iframe {
+  display: block;
+  border: 0;
+  width: 100%;
+  height: 120px;
 }
 
 /* social row desktop: basso a destra */
@@ -264,11 +382,11 @@ button {
   bottom: 0;
   z-index: 60;
   display: flex;
-  gap: 28px;
+  gap: 26px;
   padding: 0 13px 12px 0;
-  font-size: 11.5px;
-  font-weight: 400;
-  letter-spacing: 0.02em;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
   color: var(--ink);
 }
 
@@ -281,8 +399,7 @@ button {
 }
 
 /* =========================================================
-   drawer player mobile (pagine 2-3): barra nera col
-   trattino sempre visibile, pannello grigio che sale
+   drawer player mobile
    ========================================================= */
 .player-drawer {
   position: fixed;
@@ -313,19 +430,30 @@ button {
 
 .drawer-panel {
   background: var(--panel);
-  height: 87px;
+  min-height: 87px;
   position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  padding-bottom: 34px;
 }
 
-.drawer-panel .player-label {
-  color: var(--green);
-  font-size: 15px;
-  font-weight: 500;
-  letter-spacing: 0.045em;
-  margin-bottom: 14px;
+.drawer-panel > .player-label {
+  margin: 22px 0;
+}
+
+.drawer-player {
+  width: 100%;
+  padding-top: 4px;
+}
+
+.drawer-player .pp-item {
+  padding: 6px 12px;
+}
+
+.drawer-player .pp-embed {
+  margin: 6px 0 2px;
 }
 
 .drawer-footer {
@@ -337,8 +465,8 @@ button {
   align-items: baseline;
   justify-content: space-between;
   padding: 8px 8px;
-  font-size: 11px;
-  font-weight: 400;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-ls);
 }
 
 .drawer-footer .copyright {
@@ -384,7 +512,6 @@ button {
   display: flex;
   flex-direction: column;
   padding: var(--gutter);
-  /* compensa l'altezza dell'header fixed */
   padding-top: clamp(72px, 10vh, 110px);
   padding-bottom: 96px;
 }
@@ -393,35 +520,25 @@ button {
   width: 100%;
 }
 
-/* titolo display */
 .display {
   font-family: var(--font-display);
   font-size: clamp(44px, 8vw, 120px);
-  font-weight: 300;
+  font-weight: var(--w-light);
   letter-spacing: -0.03em;
   line-height: 0.94;
   color: var(--ink);
-  margin: clamp(8px, 2vh, 24px) 0 clamp(28px, 5vh, 64px);
+  margin: clamp(8px, 2vh, 24px) 0 clamp(18px, 3vh, 36px);
 }
 
 .display .dim {
   color: var(--faint-soft);
 }
 
-/* label / eyebrow: minuscolo, mai maiuscolo */
-.eyebrow {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
-  color: var(--faint);
-}
-
 .section-header {
   display: flex;
   align-items: center;
   gap: 16px;
-  margin: clamp(28px, 5vh, 44px) 0 clamp(16px, 3vh, 28px);
+  margin: clamp(24px, 4vh, 36px) 0 clamp(14px, 2.5vh, 22px);
 }
 
 .section-header::after {
@@ -431,7 +548,6 @@ button {
   background: var(--hairline-soft);
 }
 
-/* link con underline che cresce da sinistra */
 .u-link {
   position: relative;
   display: inline-block;
@@ -491,8 +607,7 @@ button {
   filter: saturate(1.05);
 }
 
-/* caption a targhetta: antracite su grigio evidenziazione,
-   la barra abbraccia solo il testo, a filo dell'angolo */
+/* caption a targhetta: display Expanded regular su grigio */
 .release-caption {
   position: absolute;
   bottom: 0;
@@ -500,8 +615,9 @@ button {
   max-width: 94%;
   background: var(--hl);
   color: var(--ink);
-  font-weight: 500;
-  font-size: clamp(14px, 1.4vw, 20px);
+  font-family: var(--font-display);
+  font-weight: var(--w-regular);
+  font-size: var(--text-m);
   letter-spacing: -0.01em;
   line-height: 1.15;
 }
@@ -517,10 +633,9 @@ button {
   gap: 8px;
   padding: 0.55rem 0.6rem;
   border-top: 0.5px solid var(--hairline-soft);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
   color: var(--faint);
 }
 
@@ -543,27 +658,35 @@ a.event-row:hover {
   background: rgba(35, 31, 32, 0.03);
 }
 
+/* evento passato: attenuato, senza prezzo né link */
+.event-row.is-past {
+  opacity: 0.5;
+}
+
+.event-date,
+.event-line,
+.event-venue,
+.event-buy {
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
+}
+
 .event-date {
-  font-family: var(--font-mono);
-  font-size: clamp(11px, 1vw, 13px);
-  font-weight: 400;
-  letter-spacing: 0.05em;
   color: var(--faint);
 }
 
 .event-title {
-  font-size: clamp(16px, 1.8vw, 26px);
-  font-weight: 500;
-  letter-spacing: -0.02em;
+  font-family: var(--font-display);
+  font-size: var(--text-l);
+  font-weight: var(--w-regular);
+  letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
 .event-line {
-  font-family: var(--font-mono);
-  font-size: clamp(10px, 0.9vw, 12px);
-  letter-spacing: 0.03em;
   color: var(--faint);
   margin-top: 4px;
   white-space: nowrap;
@@ -572,24 +695,17 @@ a.event-row:hover {
 }
 
 .event-venue {
-  font-family: var(--font-mono);
-  font-size: clamp(10px, 0.9vw, 12px);
-  letter-spacing: 0.04em;
   color: var(--faint);
   margin-top: 4px;
 }
 
 .event-price {
-  font-size: clamp(15px, 1.5vw, 21px);
-  font-weight: 500;
+  font-size: var(--text-m);
+  font-weight: var(--w-regular);
   text-align: right;
 }
 
 .event-buy {
-  font-family: var(--font-mono);
-  font-size: clamp(10px, 0.9vw, 12px);
-  font-weight: 400;
-  letter-spacing: 0.05em;
   color: var(--green);
   margin-top: 3px;
   text-align: right;
@@ -600,29 +716,28 @@ a.event-row:hover .event-buy {
   opacity: 0.7;
 }
 
-.event-row.sold-out {
-  opacity: 0.45;
-}
-
 .event-row.sold-out .event-price {
   color: var(--faint);
-  font-size: 11px;
+  font-size: var(--label-size);
 }
 
 /* ---- about / contatti ---- */
 .about-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
-  column-gap: clamp(32px, 6vw, 120px);
+  /* sinistra testo ~55%, destra contatti+radio ~35% */
+  grid-template-columns: minmax(0, 55fr) minmax(0, 35fr);
+  column-gap: clamp(32px, 6vw, 96px);
   row-gap: clamp(24px, 5vh, 40px);
 }
 
 .about-bio p {
-  font-size: clamp(15px, 1.5vw, 22px);
-  letter-spacing: -0.015em;
-  line-height: 1.42;
-  color: rgba(35, 31, 32, 0.75);
-  max-width: 46ch;
+  text-align: left;
+  font-size: var(--text-l);
+  font-weight: var(--w-light);
+  letter-spacing: -0.005em;
+  line-height: 1.5;
+  color: rgba(35, 31, 32, 0.78);
+  max-width: 52ch;
 }
 
 .about-bio p + p {
@@ -630,7 +745,7 @@ a.event-row:hover .event-buy {
 }
 
 .about-bio strong {
-  font-weight: 500;
+  font-weight: var(--w-regular);
   color: var(--ink);
 }
 
@@ -638,17 +753,27 @@ a.event-row:hover .event-buy {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  font-size: clamp(13px, 1.1vw, 16px);
+}
+
+.contact-list li {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--hairline-soft);
+  font-size: var(--text-m);
+}
+
+.contact-list li:last-child {
+  border-bottom: 0;
 }
 
 .contact-list .key {
-  display: inline-block;
-  width: clamp(88px, 8vw, 120px);
-  font-family: var(--font-mono);
-  font-size: clamp(10px, 0.9vw, 12px);
-  font-weight: 400;
-  letter-spacing: 0.05em;
+  flex-shrink: 0;
+  width: clamp(96px, 9vw, 130px);
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
   color: var(--faint);
 }
 
@@ -659,24 +784,26 @@ a.event-row:hover .event-buy {
 }
 
 .radio-item {
+  width: 100%;
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 8px 12px;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.04em;
+  padding: 10px 12px;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
   color: rgba(35, 31, 32, 0.7);
+  text-align: left;
   border-bottom: 0.5px solid var(--hairline-soft);
   transition: color 0.2s ease, background 0.2s ease;
 }
 
-.radio-item:last-child {
+li:last-child > .radio-item {
   border-bottom: 0;
 }
 
-a.radio-item:hover {
+a.radio-item:hover,
+button.radio-item:hover {
   color: var(--ink);
   background: rgba(0, 170, 78, 0.07);
 }
@@ -684,6 +811,13 @@ a.radio-item:hover {
 .radio-item .num {
   color: var(--green);
   flex-shrink: 0;
+}
+
+.radio-item .title {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .radio-item .cat {
@@ -705,10 +839,9 @@ a.radio-item:hover {
   gap: 12px;
   padding: 10px var(--gutter);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.92) 45%);
-  font-family: var(--font-mono);
-  font-size: 10px;
-  font-weight: 400;
-  letter-spacing: 0.03em;
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: var(--label-ls);
   color: var(--faint);
 }
 
@@ -747,10 +880,6 @@ a.radio-item:hover {
    responsive
    ========================================================= */
 @media (max-width: 720px) {
-  .wordmark {
-    font-size: 30px;
-  }
-
   .main-nav {
     display: none;
   }
@@ -764,11 +893,15 @@ a.radio-item:hover {
     display: none;
   }
 
+  .player-panel,
+  .player-panel.is-open {
+    display: none;
+  }
+
   .player-drawer {
     display: flex;
   }
 
-  /* la tagline non deve finire sotto la barra handler */
   .home {
     padding-bottom: 21px;
   }

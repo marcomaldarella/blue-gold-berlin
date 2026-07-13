@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import { RADIO_TRACKS } from "@/lib/releases";
@@ -94,16 +95,12 @@ export default function AboutPage() {
             <ul className="radio-list" data-enter>
               {RADIO_TRACKS.map((t, i) => (
                 <li key={t.catalog}>
-                  <a
-                    className="radio-item"
-                    href={`https://bandcamp.com/EmbeddedPlayer/album=${t.albumId}/size=large/bgcol=0a0a08/linkcol=6691ff/tracklist=false/artwork=small/transparent=true/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
+                  {/* apre il player della home su quel brano */}
+                  <Link className="radio-item" href={`/?track=${i}`}>
                     <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                    <span>{t.title}</span>
+                    <span className="title">{t.title}</span>
                     <span className="cat">{t.catalog}</span>
-                  </a>
+                  </Link>
                 </li>
               ))}
             </ul>
