@@ -971,3 +971,9 @@ button.radio-item:hover {
     gap: 4px;
   }
 }
+
+/* social link sempre in light, anche nel drawer e nel menu */
+.drawer-footer .socials a,
+.menu-overlay-footer .socials a {
+  font-weight: var(--w-light);
+}
