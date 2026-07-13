@@ -6,6 +6,8 @@ export type Event = {
   venue: string;
   time: string;
   date: string;
+  /* data ISO per la classificazione upcoming/past */
+  iso: string;
   price: number;
   fee: number;
   link: string;
@@ -21,6 +23,7 @@ export const EVENTS: Event[] = [
     venue: "RSO, Berlin",
     time: "23:59–10:00",
     date: "18 jul",
+    iso: "2026-07-18",
     price: 15,
     fee: 1.5,
     link: "",
@@ -33,6 +36,7 @@ export const EVENTS: Event[] = [
     venue: "Studio Halle, Berlin",
     time: "20:00–01:00",
     date: "25 jul",
+    iso: "2026-07-25",
     price: 12,
     fee: 1.5,
     link: "",
@@ -45,6 +49,7 @@ export const EVENTS: Event[] = [
     venue: "Wilde Renate, Berlin",
     time: "23:00–08:00",
     date: "8 aug",
+    iso: "2026-08-08",
     price: 18,
     fee: 2,
     link: "",
@@ -57,6 +62,7 @@ export const EVENTS: Event[] = [
     venue: "Trauma Bar, Berlin",
     time: "22:00–06:00",
     date: "22 aug",
+    iso: "2026-08-22",
     price: 16,
     fee: 2,
     link: "",
@@ -69,6 +75,7 @@ export const EVENTS: Event[] = [
     venue: "Else, Berlin",
     time: "14:00–02:00",
     date: "5 sep",
+    iso: "2026-09-05",
     price: 20,
     fee: 2,
     link: "",
