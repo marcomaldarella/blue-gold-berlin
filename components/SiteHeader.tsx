@@ -22,18 +22,40 @@ const LINKS = [
 export default function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
 
-  /* chiudi il menu quando cambia rotta */
+  /* chiusura animata: fade-out CSS, poi smontaggio (regola iOS) */
+  const closeMenu = () => {
+    setClosing(true);
+    window.setTimeout(() => {
+      setMenuOpen(false);
+      setClosing(false);
+    }, 280);
+  };
+
+  const toggleMenu = () => {
+    if (menuOpen && !closing) closeMenu();
+    else if (!menuOpen) setMenuOpen(true);
+  };
+
+  /* chiudi il menu quando cambia rotta (senza animazione) */
   useEffect(() => {
     setMenuOpen(false);
+    setClosing(false);
   }, [pathname]);
 
-  /* blocca lo scroll sotto l'overlay */
+  /* blocca lo scroll sotto l'overlay + Esc per chiudere */
   useEffect(() => {
     document.body.style.overflow = menuOpen ? "hidden" : "";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && menuOpen) closeMenu();
+    };
+    window.addEventListener("keydown", onKey);
     return () => {
       document.body.style.overflow = "";
+      window.removeEventListener("keydown", onKey);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [menuOpen]);
 
   return (
@@ -56,31 +78,29 @@ export default function SiteHeader() {
         </nav>
 
         <button
-          className="menu-toggle"
+          className={`menu-toggle${menuOpen && !closing ? " is-open" : ""}`}
           aria-expanded={menuOpen}
           aria-label={menuOpen ? "close menu" : "open menu"}
-          onClick={() => setMenuOpen((v) => !v)}
+          onClick={toggleMenu}
         >
-          {menuOpen ? (
-            <svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true">
-              <line x1="2" y1="1" x2="44" y2="13" />
-              <line x1="44" y1="1" x2="2" y2="13" />
-            </svg>
-          ) : (
-            <svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true">
-              <line x1="0" y1="2" x2="46" y2="2" />
-              <line x1="0" y1="7" x2="46" y2="7" />
-              <line x1="0" y1="12" x2="46" y2="12" />
-            </svg>
-          )}
+          {/* un solo hamburger: le linee si morfano in X via CSS */}
+          <svg width="46" height="14" viewBox="0 0 46 14" aria-hidden="true">
+            <line className="l1" x1="0" y1="2" x2="46" y2="2" />
+            <line className="l2" x1="0" y1="7" x2="46" y2="7" />
+            <line className="l3" x1="0" y1="12" x2="46" y2="12" />
+          </svg>
         </button>
       </header>
 
       {menuOpen && (
-        <div className="menu-overlay" role="dialog" aria-label="menu">
+        <div
+          className={`menu-overlay${closing ? " is-closing" : ""}`}
+          role="dialog"
+          aria-label="menu"
+        >
           <nav aria-label="mobile navigation">
             {LINKS.map(({ href, label }) => (
-              <Link key={href} href={href} onClick={() => setMenuOpen(false)}>
+              <Link key={href} href={href} onClick={closeMenu}>
                 {label}
               </Link>
             ))}

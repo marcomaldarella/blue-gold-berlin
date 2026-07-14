@@ -170,6 +170,26 @@ button {
   display: block;
   stroke: var(--ink);
   stroke-width: 2.2;
+  overflow: visible;
+}
+
+/* hamburger → X: le due linee esterne ruotano sul centro,
+   quella centrale svanisce */
+.menu-toggle line {
+  transition: transform 0.32s cubic-bezier(0.2, 0.7, 0.2, 1), opacity 0.2s ease;
+  transform-origin: 23px 7px;
+}
+
+.menu-toggle.is-open .l1 {
+  transform: translateY(5px) rotate(15deg);
+}
+
+.menu-toggle.is-open .l2 {
+  opacity: 0;
+}
+
+.menu-toggle.is-open .l3 {
+  transform: translateY(-5px) rotate(-15deg);
 }
 
 /* =========================================================
@@ -185,6 +205,68 @@ button {
   align-items: center;
   justify-content: center;
   padding-bottom: 56px;
+  animation: menu-in 0.3s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.menu-overlay.is-closing {
+  animation: menu-out 0.28s ease forwards;
+  pointer-events: none;
+}
+
+@keyframes menu-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes menu-out {
+  to {
+    opacity: 0;
+  }
+}
+
+/* voci: entrata staggherata dal basso */
+.menu-overlay nav a {
+  opacity: 0;
+  transform: translateY(18px);
+  animation: menu-item-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.menu-overlay nav a:nth-child(1) { animation-delay: 0.06s; }
+.menu-overlay nav a:nth-child(2) { animation-delay: 0.12s; }
+.menu-overlay nav a:nth-child(3) { animation-delay: 0.18s; }
+.menu-overlay nav a:nth-child(4) { animation-delay: 0.24s; }
+
+@keyframes menu-item-in {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.menu-overlay-footer {
+  opacity: 0;
+  animation: menu-fade 0.4s ease 0.28s forwards;
+}
+
+@keyframes menu-fade {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .menu-overlay,
+  .menu-overlay nav a,
+  .menu-overlay-footer {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .menu-toggle line {
+    transition: none;
+  }
 }
 
 .menu-overlay nav {
