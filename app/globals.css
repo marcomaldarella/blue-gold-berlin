@@ -251,6 +251,10 @@ button {
   padding: 0 16px;
 }
 
+.tagline span {
+  display: block;
+}
+
 /* box player desktop: nero, a filo dell'angolo basso-sinistra */
 .player-box {
   position: fixed;
@@ -424,28 +428,31 @@ button {
   height: 120px;
 }
 
-/* social row desktop: basso a destra */
+/* social row home: targhette navbar a filo dell'angolo basso-destra */
 .home-socials {
   position: fixed;
   right: 0;
   bottom: 0;
   z-index: 60;
   display: flex;
-  gap: 26px;
-  padding: 0 13px 12px 0;
-  font-size: var(--label-size);
-  font-weight: var(--w-light);
-  letter-spacing: var(--label-ls);
-  color: var(--ink);
+  gap: 4px;
+  transform: scaleX(1.38);
+  transform-origin: bottom right;
 }
 
 .home-socials a {
+  background: var(--hl);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 14px;
   font-weight: var(--w-light);
-  transition: opacity 0.2s ease;
+  letter-spacing: -0.005em;
+  line-height: 1.16;
+  transition: filter 0.2s ease;
 }
 
 .home-socials a:hover {
-  opacity: 0.6;
+  filter: brightness(0.92);
 }
 
 /* =========================================================
@@ -542,10 +549,10 @@ button {
   justify-content: center;
 }
 
-.splash .wordmark {
-  font-size: clamp(38px, 7vw, 84px);
+.splash-mark {
+  width: clamp(88px, 12vw, 150px);
+  height: auto;
   opacity: 0;
-  transform-origin: center;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -618,8 +625,9 @@ button {
 /* ---- griglia release ---- */
 .release-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(clamp(250px, 23vw, 400px), 1fr));
-  gap: var(--gutter);
+  /* 3 cover a riga, tutta la larghezza meno i margini, poco respiro */
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(8px, 0.8vw, 14px);
 }
 
 .release-card {
@@ -802,7 +810,8 @@ a.event-row:hover .event-buy {
   align-items: baseline;
   gap: 12px;
   padding: 5px 0;
-  font-size: var(--text-m);
+  font-size: var(--label-size);
+  letter-spacing: var(--label-ls);
 }
 
 .contact-list .key {
@@ -857,7 +866,8 @@ button.radio-item:hover {
   flex-shrink: 0;
 }
 
-/* ---- footer pagine interne ---- */
+/* ---- footer pagine interne: stesse targhette della navbar,
+       a filo dei bordi bassi ---- */
 .site-footer {
   position: fixed;
   bottom: 0;
@@ -865,33 +875,49 @@ button.radio-item:hover {
   right: 0;
   z-index: 20;
   display: flex;
-  align-items: baseline;
+  align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
-  padding: 10px var(--gutter);
-  background: linear-gradient(180deg, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.92) 45%);
-  font-size: var(--label-size);
-  font-weight: var(--w-light);
-  letter-spacing: var(--label-ls);
-  color: var(--faint);
+  pointer-events: none;
 }
 
-.site-footer .copyright {
-  color: var(--faint);
+.site-footer a,
+.site-footer .footer-stamp {
+  pointer-events: auto;
+}
+
+.site-footer .footer-stamp {
+  display: inline-block;
+  background: var(--hl);
+  color: var(--ink);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: var(--w-light);
+  letter-spacing: -0.005em;
+  line-height: 1.16;
+  transform: scaleX(1.38);
+  transform-origin: bottom left;
 }
 
 .footer-links {
   display: flex;
-  gap: 16px;
+  gap: 4px;
+  transform: scaleX(1.38);
+  transform-origin: bottom right;
 }
 
 .footer-links a {
+  background: var(--hl);
   color: var(--ink);
-  transition: opacity 0.2s ease;
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: var(--w-light);
+  letter-spacing: -0.005em;
+  line-height: 1.16;
+  transition: filter 0.2s ease;
 }
 
 .footer-links a:hover {
-  opacity: 0.6;
+  filter: brightness(0.92);
 }
 
 /* ---- entrance (stati iniziali gestiti da GSAP) ---- */
@@ -952,6 +978,10 @@ button.radio-item:hover {
     grid-template-columns: 1fr;
   }
 
+  .release-grid {
+    grid-template-columns: 1fr;
+  }
+
   .event-row {
     grid-template-columns: 48px minmax(0, 1fr) auto;
     gap: 8px;
@@ -960,7 +990,16 @@ button.radio-item:hover {
   .site-footer {
     flex-direction: column;
     align-items: flex-start;
-    gap: 4px;
+    gap: 2px;
+  }
+
+  .site-footer .footer-stamp,
+  .footer-links a {
+    font-size: 11px;
+  }
+
+  .footer-links {
+    transform-origin: bottom left;
   }
 }
 

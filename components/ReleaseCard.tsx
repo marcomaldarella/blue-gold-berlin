@@ -31,7 +31,6 @@ export default function ReleaseCard({
       </figure>
       <span className="release-meta">
         <span className="cat">{release.catalog}</span>
-        <span>{release.label}</span>
         <span className="buy">buy on bandcamp ↗</span>
       </span>
     </a>

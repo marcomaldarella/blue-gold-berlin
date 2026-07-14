@@ -24,12 +24,17 @@ export default function SplashScreen() {
     let seen = false;
     try {
       seen = sessionStorage.getItem(KEY) === "1";
-      sessionStorage.setItem(KEY, "1");
     } catch {
       /* storage non disponibile: mostra comunque la splash */
     }
 
     const finish = () => {
+      /* il flag va scritto QUI, non al mount: con StrictMode il primo
+         effect viene subito smontato e un flag già scritto farebbe
+         saltare la splash al secondo mount */
+      try {
+        sessionStorage.setItem(KEY, "1");
+      } catch {}
       el.style.display = "none";
       setGone(true);
       window.dispatchEvent(new Event(SPLASH_DONE_EVENT));
@@ -42,12 +47,12 @@ export default function SplashScreen() {
       return;
     }
 
-    const mark = el.querySelector(".wordmark");
+    const mark = el.querySelector(".splash-mark");
     const tl = gsap.timeline({ onComplete: finish });
     tl.fromTo(
       mark,
-      { opacity: 0, y: 10, scaleX: 1.33 },
-      { opacity: 1, y: 0, scaleX: 1.33, duration: 0.45, ease: "power2.out" }
+      { opacity: 0, y: 12, scale: 0.94 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.5, ease: "power2.out" }
     )
       .to(mark, { opacity: 0, duration: 0.4, ease: "power2.in" }, "+=0.45")
       .to(el, { opacity: 0, duration: 0.35, ease: "power2.inOut" }, "-=0.15");
@@ -62,7 +67,14 @@ export default function SplashScreen() {
   return (
     <>
       <div className="splash" id="bg-splash" ref={rootRef} aria-hidden="true">
-        <span className="wordmark">BlueGold</span>
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="splash-mark"
+          src="/assets/favicon-192.png"
+          alt=""
+          width={192}
+          height={192}
+        />
       </div>
       <script
         dangerouslySetInnerHTML={{

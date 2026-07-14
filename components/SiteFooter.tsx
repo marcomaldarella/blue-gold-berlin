@@ -4,8 +4,8 @@ import { SITE } from "@/lib/site";
 export default function SiteFooter() {
   return (
     <footer className="site-footer">
-      <span>
-        <span className="copyright">©2026</span> · berlin · <LiveClock />
+      <span className="footer-stamp">
+        ©2026 · berlin · <LiveClock />
       </span>
       <nav className="footer-links" aria-label="social links">
         <a

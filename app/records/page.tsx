@@ -19,7 +19,9 @@ export default function RecordsPage() {
       <div className="page-inner">
 
         <h1 className="display" data-enter>
-          records <span className="dim">— vinyl &amp; digital</span>
+          records <span className="dim">—</span>
+          <br />
+          <span className="dim">vinyl &amp; digital</span>
         </h1>
 
         <section aria-labelledby="bg-heading">

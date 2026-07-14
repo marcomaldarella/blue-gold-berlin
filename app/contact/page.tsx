@@ -14,7 +14,9 @@ export default function ContactPage() {
     <main className="page js-entrance">
       <div className="page-inner">
         <h1 className="display" data-enter>
-          contact <span className="dim">— get in touch</span>
+          contact <span className="dim">—</span>
+          <br />
+          <span className="dim">get in touch</span>
         </h1>
 
         <div className="section-header" data-enter>

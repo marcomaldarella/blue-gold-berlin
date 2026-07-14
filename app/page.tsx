@@ -8,24 +8,22 @@ export default function HomePage() {
     <main className="home js-entrance">
       <SplashScreen />
 
-      <p className="tagline" data-enter>
-        Sound design for altered states of mind
-        <br />
-        Record label &amp; studio based in berlin,
-        <br />
-        Founded by mruda
+      <p className="tagline">
+        <span data-enter>Sound design for altered states of mind</span>
+        <span data-enter>Record label &amp; studio based in berlin,</span>
+        <span data-enter>Founded by mruda</span>
       </p>
 
       <PlayerDrawer />
 
-      <nav className="home-socials" aria-label="social links" data-enter>
-        <a href={SITE.bandcamp} target="_blank" rel="noopener noreferrer">
+      <nav className="home-socials" aria-label="social links">
+        <a href={SITE.bandcamp} target="_blank" rel="noopener noreferrer" data-enter>
           bandcamp
         </a>
-        <a href={SITE.instagram} target="_blank" rel="noopener noreferrer">
+        <a href={SITE.instagram} target="_blank" rel="noopener noreferrer" data-enter>
           instagram
         </a>
-        <a href={SITE.ra} target="_blank" rel="noopener noreferrer">
+        <a href={SITE.ra} target="_blank" rel="noopener noreferrer" data-enter>
           resident advisor
         </a>
       </nav>
