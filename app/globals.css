@@ -54,10 +54,10 @@ html {
 body {
   font-variant-numeric: tabular-nums;
   font-family: var(--font-sans);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   font-size: var(--text-s);
   letter-spacing: -0.005em;
-  line-height: 1.47;
+  line-height: 1.32;
   color: var(--ink);
   background: var(--paper);
   min-height: 100svh;
@@ -93,7 +93,7 @@ button {
 .eyebrow {
   font-family: var(--font-sans);
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: var(--faint);
 }
@@ -124,7 +124,7 @@ button {
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 30px;
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: -0.01em;
   line-height: 1.09;
   /* il PDF stira il display oltre l'Expanded (misurato) */
@@ -144,7 +144,7 @@ button {
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 14px;
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: -0.005em;
   line-height: 1.16;
   transition: filter 0.2s ease;
@@ -200,7 +200,7 @@ button {
   color: var(--ink);
   font-family: var(--font-display);
   font-size: 26px;
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: -0.01em;
   line-height: 1.08;
 }
@@ -244,7 +244,7 @@ button {
   /* dal PDF: glifi Expanded ma spazi-parola stretti */
   font-family: var(--font-display);
   font-size: var(--text-s);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: -0.005em;
   word-spacing: -7px;
   line-height: 1.18;
@@ -280,7 +280,7 @@ button {
 .player-label {
   color: var(--active-dark);
   font-size: var(--text-m);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   transition: opacity 0.2s ease;
 }
@@ -296,7 +296,7 @@ button {
   cursor: grab;
   touch-action: none;
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   text-align: left;
 }
@@ -323,7 +323,6 @@ button {
   bottom: 100%;
   width: 100%;
   background: var(--box);
-  border-bottom: 0.5px solid rgba(255, 255, 255, 0.14);
   display: none;
   flex-direction: column;
   padding-bottom: 8px;
@@ -353,7 +352,7 @@ button {
   justify-content: space-between;
   padding: 10px 14px 6px;
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: rgba(255, 255, 255, 0.7);
 }
@@ -380,7 +379,7 @@ button {
   gap: 10px;
   padding: 6px 14px;
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: rgba(255, 255, 255, 0.8);
   text-align: left;
@@ -435,13 +434,13 @@ button {
   gap: 26px;
   padding: 0 13px 12px 0;
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: var(--ink);
 }
 
 .home-socials a {
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   transition: opacity 0.2s ease;
 }
 
@@ -592,12 +591,6 @@ button {
   margin: clamp(24px, 4vh, 36px) 0 clamp(14px, 2.5vh, 22px);
 }
 
-.section-header::after {
-  content: "";
-  flex: 1;
-  height: 0.5px;
-  background: var(--hairline-soft);
-}
 
 .u-link {
   position: relative;
@@ -633,7 +626,6 @@ button {
   position: relative;
   display: block;
   background: var(--tile);
-  border: 0.5px solid var(--hairline-soft);
   overflow: hidden;
 }
 
@@ -667,7 +659,7 @@ button {
   background: var(--hl);
   color: var(--ink);
   font-family: var(--font-display);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   font-size: var(--text-m);
   letter-spacing: -0.01em;
   line-height: 1.15;
@@ -683,9 +675,8 @@ button {
   align-items: baseline;
   gap: 8px;
   padding: 0.55rem 0.6rem;
-  border-top: 0.5px solid var(--hairline-soft);
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: var(--faint);
 }
@@ -700,8 +691,7 @@ button {
   grid-template-columns: clamp(72px, 8vw, 120px) minmax(0, 1fr) auto;
   align-items: center;
   gap: var(--gutter);
-  padding: clamp(16px, 2.2vh, 24px) 0;
-  border-bottom: 0.5px solid var(--hairline);
+  padding: clamp(14px, 2vh, 20px) 0;
   transition: background 0.3s ease;
 }
 
@@ -719,7 +709,7 @@ a.event-row:hover {
 .event-venue,
 .event-buy {
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
 }
 
@@ -730,7 +720,7 @@ a.event-row:hover {
 .event-title {
   font-family: var(--font-display);
   font-size: var(--text-l);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: -0.01em;
   white-space: nowrap;
   overflow: hidden;
@@ -752,7 +742,7 @@ a.event-row:hover {
 
 .event-price {
   font-size: var(--text-m);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   text-align: right;
 }
 
@@ -775,18 +765,19 @@ a.event-row:hover .event-buy {
 /* ---- about / contatti ---- */
 .about-grid {
   display: grid;
-  /* sinistra testo ~55%, destra contatti+radio ~35% */
-  grid-template-columns: minmax(0, 55fr) minmax(0, 35fr);
-  column-gap: clamp(32px, 6vw, 96px);
-  row-gap: clamp(24px, 5vh, 40px);
+  /* colonne compatte e ravvicinate, spazio residuo a destra */
+  grid-template-columns: minmax(0, 52ch) minmax(0, 560px);
+  column-gap: clamp(28px, 4vw, 72px);
+  row-gap: clamp(20px, 4vh, 32px);
+  justify-content: start;
 }
 
 .about-bio p {
   text-align: left;
   font-size: var(--text-l);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: -0.005em;
-  line-height: 1.5;
+  line-height: 1.32;
   color: var(--ink);
   max-width: 52ch;
 }
@@ -810,27 +801,21 @@ a.event-row:hover .event-buy {
   display: flex;
   align-items: baseline;
   gap: 12px;
-  padding: 8px 0;
-  border-bottom: 0.5px solid var(--hairline-soft);
+  padding: 5px 0;
   font-size: var(--text-m);
-}
-
-.contact-list li:last-child {
-  border-bottom: 0;
 }
 
 .contact-list .key {
   flex-shrink: 0;
   width: clamp(96px, 9vw, 130px);
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: var(--faint);
 }
 
 .radio-list {
   list-style: none;
-  border: 0.5px solid var(--hairline-soft);
   background: var(--tile);
 }
 
@@ -839,18 +824,13 @@ a.event-row:hover .event-buy {
   display: flex;
   align-items: baseline;
   gap: 10px;
-  padding: 10px 12px;
+  padding: 7px 12px;
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: rgba(255, 255, 255, 0.85);
   text-align: left;
-  border-bottom: 0.5px solid var(--hairline-soft);
   transition: color 0.2s ease, background 0.2s ease;
-}
-
-li:last-child > .radio-item {
-  border-bottom: 0;
 }
 
 a.radio-item:hover,
@@ -891,7 +871,7 @@ button.radio-item:hover {
   padding: 10px var(--gutter);
   background: linear-gradient(180deg, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.92) 45%);
   font-size: var(--label-size);
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
   letter-spacing: var(--label-ls);
   color: var(--faint);
 }
@@ -987,5 +967,5 @@ button.radio-item:hover {
 /* social link: stesso peso regular del resto del sistema */
 .drawer-footer .socials a,
 .menu-overlay-footer .socials a {
-  font-weight: var(--w-regular);
+  font-weight: var(--w-light);
 }
