@@ -22,8 +22,9 @@
      body    → Zalando Sans regular, scala 13/15/17
      label   → meta/etichette: 11px, ls 0.04em, regular
      pesi ammessi: 300 (light) e 400 (regular)          */
-  --font-sans: var(--font-zalando-sans), ui-sans-serif, sans-serif;
-  --font-mono: var(--font-zalando-sans), sans-serif;
+  /* Zalando Sans Expanded OVUNQUE: anche body, label e liste */
+  --font-sans: var(--font-zalando), ui-sans-serif, sans-serif;
+  --font-mono: var(--font-zalando), sans-serif;
   --font-display: var(--font-zalando), ui-sans-serif, sans-serif;
   --w-light: 300;
   --w-regular: 400;
@@ -877,6 +878,8 @@ button.radio-item:hover {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
+  /* lascia l'angolo basso-sinistra al box player globale */
+  padding-left: calc(max(27.2vw, 240px) + 4px);
   pointer-events: none;
 }
 
@@ -991,6 +994,9 @@ button.radio-item:hover {
     flex-direction: column;
     align-items: flex-start;
     gap: 2px;
+    /* sopra la maniglia del drawer mobile */
+    bottom: 21px;
+    padding-left: 0;
   }
 
   .site-footer .footer-stamp,

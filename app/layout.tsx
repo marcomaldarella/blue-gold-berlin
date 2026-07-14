@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import SiteHeader from "@/components/SiteHeader";
+import PlayerDrawer from "@/components/PlayerDrawer";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -93,6 +94,9 @@ export default function RootLayout({
         />
         <SiteHeader />
         {children}
+        {/* player globale: persiste tra le pagine, la musica non si
+            interrompe navigando */}
+        <PlayerDrawer />
       </body>
     </html>
   );

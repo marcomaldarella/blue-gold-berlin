@@ -1,5 +1,4 @@
 import PageEntrance from "@/components/PageEntrance";
-import PlayerDrawer from "@/components/PlayerDrawer";
 import SplashScreen from "@/components/SplashScreen";
 import { SITE } from "@/lib/site";
 
@@ -13,8 +12,6 @@ export default function HomePage() {
         <span data-enter>Record label &amp; studio based in berlin,</span>
         <span data-enter>Founded by mruda</span>
       </p>
-
-      <PlayerDrawer />
 
       <nav className="home-socials" aria-label="social links">
         <a href={SITE.bandcamp} target="_blank" rel="noopener noreferrer" data-enter>
