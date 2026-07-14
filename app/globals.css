@@ -1,18 +1,20 @@
 :root {
-  /* palette campionata dal PDF bluegoldwax2 */
-  --paper: #ffffff;
-  --ink: #231f20;
-  --hl: #a4a6a9;
-  --overlay: #d7d8d9;
-  --panel: #555253;
+  /* palette dark — inversione della campionatura PDF bluegoldwax2 */
+  --paper: #121212;
+  --ink: #ffffff;
+  --hl: #47494c;
+  --overlay: #1c1d1e;
+  --panel: #2a2a2b;
   /* niente colori d'accento: solo bianco/nero/grigi */
-  --active-dark: #e8e8e6;
-  --dim-dark: #8a8a88;
-  --faint: rgba(35, 31, 32, 0.45);
-  --faint-soft: rgba(35, 31, 32, 0.3);
-  --hairline: rgba(35, 31, 32, 0.16);
-  --hairline-soft: rgba(35, 31, 32, 0.08);
-  --tile: #ececec;
+  --active-dark: #ffffff;
+  --dim-dark: rgba(255, 255, 255, 0.65);
+  --faint: rgba(255, 255, 255, 0.75);
+  --faint-soft: rgba(255, 255, 255, 0.6);
+  --hairline: rgba(255, 255, 255, 0.16);
+  --hairline-soft: rgba(255, 255, 255, 0.08);
+  --tile: #1c1c1c;
+  /* box player: resta scuro fisso, non segue --ink */
+  --box: #0c0c0c;
 
   /* ============ sistema tipografico unico ============
      display → Zalando Sans Expanded (scaleX SOLO su
@@ -217,7 +219,7 @@ button {
 }
 
 .menu-overlay-footer .copyright {
-  color: var(--hl);
+  color: var(--faint);
 }
 
 .menu-overlay-footer .socials {
@@ -258,7 +260,7 @@ button {
   width: 27.2vw;
   min-width: 240px;
   min-height: 74px;
-  background: var(--ink);
+  background: var(--box);
   display: block;
   text-align: left;
 }
@@ -320,7 +322,7 @@ button {
   left: 0;
   bottom: 100%;
   width: 100%;
-  background: var(--ink);
+  background: var(--box);
   border-bottom: 0.5px solid rgba(255, 255, 255, 0.14);
   display: none;
   flex-direction: column;
@@ -353,11 +355,11 @@ button {
   font-size: var(--label-size);
   font-weight: var(--w-regular);
   letter-spacing: var(--label-ls);
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .pp-close {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   font-size: var(--text-m);
   line-height: 1;
   transition: color 0.2s ease;
@@ -380,7 +382,7 @@ button {
   font-size: var(--label-size);
   font-weight: var(--w-regular);
   letter-spacing: var(--label-ls);
-  color: rgba(255, 255, 255, 0.65);
+  color: rgba(255, 255, 255, 0.8);
   text-align: left;
   transition: color 0.2s ease, background 0.2s ease;
 }
@@ -398,7 +400,7 @@ button {
 }
 
 .pp-item .cat {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.6);
   flex-shrink: 0;
 }
 
@@ -439,12 +441,11 @@ button {
 }
 
 .home-socials a {
-  font-weight: var(--w-light);
+  font-weight: var(--w-regular);
   transition: opacity 0.2s ease;
 }
 
 .home-socials a:hover {
-  font-weight: var(--w-light);
   opacity: 0.6;
 }
 
@@ -464,7 +465,7 @@ button {
 .drawer-handle {
   width: 100%;
   height: 21px;
-  background: var(--ink);
+  background: var(--box);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -520,7 +521,7 @@ button {
 }
 
 .drawer-footer .copyright {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .drawer-footer .socials {
@@ -673,7 +674,7 @@ button {
 }
 
 .release-caption span {
-  color: rgba(35, 31, 32, 0.6);
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .release-meta {
@@ -705,7 +706,7 @@ button {
 }
 
 a.event-row:hover {
-  background: rgba(35, 31, 32, 0.03);
+  background: rgba(255, 255, 255, 0.04);
 }
 
 /* evento passato: attenuato, senza prezzo né link */
@@ -783,10 +784,10 @@ a.event-row:hover .event-buy {
 .about-bio p {
   text-align: left;
   font-size: var(--text-l);
-  font-weight: var(--w-light);
+  font-weight: var(--w-regular);
   letter-spacing: -0.005em;
   line-height: 1.5;
-  color: rgba(35, 31, 32, 0.78);
+  color: var(--ink);
   max-width: 52ch;
 }
 
@@ -842,7 +843,7 @@ a.event-row:hover .event-buy {
   font-size: var(--label-size);
   font-weight: var(--w-regular);
   letter-spacing: var(--label-ls);
-  color: rgba(35, 31, 32, 0.7);
+  color: rgba(255, 255, 255, 0.85);
   text-align: left;
   border-bottom: 0.5px solid var(--hairline-soft);
   transition: color 0.2s ease, background 0.2s ease;
@@ -855,7 +856,7 @@ li:last-child > .radio-item {
 a.radio-item:hover,
 button.radio-item:hover {
   color: var(--ink);
-  background: rgba(35, 31, 32, 0.05);
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .radio-item .num {
@@ -888,7 +889,7 @@ button.radio-item:hover {
   justify-content: space-between;
   gap: 12px;
   padding: 10px var(--gutter);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.92) 45%);
+  background: linear-gradient(180deg, rgba(18, 18, 18, 0) 0%, rgba(18, 18, 18, 0.92) 45%);
   font-size: var(--label-size);
   font-weight: var(--w-regular);
   letter-spacing: var(--label-ls);
@@ -896,7 +897,7 @@ button.radio-item:hover {
 }
 
 .site-footer .copyright {
-  color: var(--hl);
+  color: var(--faint);
 }
 
 .footer-links {
@@ -917,12 +918,23 @@ button.radio-item:hover {
 .js-entrance [data-enter] {
   opacity: 0;
   transform: translateY(14px);
+  /* fail-safe: se il reveal JS non parte (errore, StrictMode, no-JS)
+     i contenuti riappaiono comunque da soli dopo ~2.5s */
+  animation: enter-failsafe 0.6s ease 2.5s forwards;
+}
+
+@keyframes enter-failsafe {
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .js-entrance [data-enter] {
     opacity: 1;
     transform: none;
+    animation: none;
   }
 }
 
@@ -972,8 +984,8 @@ button.radio-item:hover {
   }
 }
 
-/* social link sempre in light, anche nel drawer e nel menu */
+/* social link: stesso peso regular del resto del sistema */
 .drawer-footer .socials a,
 .menu-overlay-footer .socials a {
-  font-weight: var(--w-light);
+  font-weight: var(--w-regular);
 }

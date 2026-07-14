@@ -7,7 +7,7 @@ import { SITE } from "@/lib/site";
 
 /* embed Bandcamp in toni bianchi su fondo ink */
 const largeSrc = (albumId: number) =>
-  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=231f20/linkcol=e8e8e6/tracklist=false/artwork=small/transparent=true/`;
+  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=0c0c0c/linkcol=e8e8e6/tracklist=false/artwork=small/transparent=true/`;
 
 /**
  * Player della home:

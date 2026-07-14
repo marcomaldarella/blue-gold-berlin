@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import gsap from "gsap";
 import { SPLASH_DONE_EVENT } from "@/components/SplashScreen";
 
@@ -11,12 +11,10 @@ import { SPLASH_DONE_EVENT } from "@/components/SplashScreen";
  * ancora visibile, aspetta il suo evento di fine.
  */
 export default function PageEntrance() {
-  const done = useRef(false);
-
   useEffect(() => {
-    if (done.current) return;
-    done.current = true;
-
+    /* niente guard "once": con lo StrictMode di React il primo effect
+       viene smontato subito (cleanup → tl.kill) e un guard impedirebbe
+       al secondo mount di ripartire → contenuti bloccati a opacity 0 */
     const root = document.querySelector(".js-entrance");
     if (!root) return;
 
