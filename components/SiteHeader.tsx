@@ -13,7 +13,7 @@ const LINKS = [
 ];
 
 /**
- * Header dal PDF: wordmark "BlueGold" su barra grigia a filo
+ * Header dal PDF: wordmark "Bluegold" su barra grigia a filo
  * dell'angolo (0,0); nav desktop evidenziata a filo del bordo
  * destro; su mobile hamburger in box grigio che apre l'overlay
  * menu (pagina 4). Overlay smontato dal DOM quando chiuso
@@ -39,8 +39,8 @@ export default function SiteHeader() {
   return (
     <>
       <header className="site-header">
-        <Link href="/" className="wordmark" aria-label="BlueGold — home">
-          BlueGold
+        <Link href="/" className="wordmark" aria-label="Bluegold — home">
+          Bluegold
         </Link>
 
         <nav className="main-nav" aria-label="main navigation">
