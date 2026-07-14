@@ -18,6 +18,16 @@ export const RA_PROMOTER = "https://ra.co/promoters/157649";
 /* storico reale dal profilo RA del promoter (157649), dal più recente */
 export const EVENTS: Event[] = [
   {
+    id: "ev-double-release",
+    host: "bluegold + acid reflux",
+    title: "Double Release Party",
+    line: "Marco Mardarella (live) · Derive · Kop32 (live) · Kā · Medlock · Jeena · Delta Division · Monosym · Staktic · Silvers",
+    venue: "Secret Location, Berlin",
+    date: "18 jul 2026",
+    iso: "2026-07-18",
+    link: RA_PROMOTER,
+  },
+  {
     id: "ev-refx-elicit-fitzroy",
     host: "acid reflux",
     title: "Acid Reflux x Elicit at Fitzroy",
@@ -83,7 +93,7 @@ export const EVENTS: Event[] = [
 ];
 
 export const HOST_ORDER: Event["host"][] = [
+  "bluegold + acid reflux",
   "bluegold",
   "acid reflux",
-  "bluegold + acid reflux",
 ];
