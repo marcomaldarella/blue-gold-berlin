@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
-import { EVENTS, HOST_ORDER, type Event } from "@/lib/events";
-import { SITE } from "@/lib/site";
+import { EVENTS, HOST_ORDER, RA_PROMOTER, type Event } from "@/lib/events";
 
 export const metadata: Metadata = {
   title: "events",
   description:
-    "Upcoming Bluegold and Acid Reflux events in Berlin — listening sessions, club nights and open-airs.",
+    "Bluegold and Acid Reflux events in Berlin — listening sessions, club nights and open-airs. Full history on Resident Advisor.",
 };
 
 /* la pagina si rigenera ogni ora: la classificazione
@@ -20,8 +19,8 @@ function berlinToday(): string {
   }).format(new Date());
 }
 
+/* niente prezzi: solo data, lineup, venue e link RA */
 function EventRowBody({ e, past }: { e: Event; past: boolean }) {
-  const total = (e.price + e.fee).toFixed(2);
   return (
     <>
       <div className="event-date">{e.date}</div>
@@ -29,19 +28,12 @@ function EventRowBody({ e, past }: { e: Event; past: boolean }) {
         <div className="event-title">{e.title}</div>
         <div className="event-line">{e.line}</div>
         <div className="event-venue">
-          {e.venue} · {e.time}
+          {e.venue}
+          {e.time ? ` · ${e.time}` : ""}
+          {e.raPick ? " · ra pick" : ""}
         </div>
       </div>
-      {past ? (
-        <div className="event-date">past</div>
-      ) : e.soldOut ? (
-        <div className="event-price">sold out</div>
-      ) : (
-        <div>
-          <div className="event-price">€{total}</div>
-          <div className="event-buy">{e.link ? "buy ↗" : "tickets soon"}</div>
-        </div>
-      )}
+      <div className="event-buy">{past ? "on ra ↗" : "tickets ↗"}</div>
     </>
   );
 }
@@ -54,7 +46,9 @@ export default function EventsPage() {
     <main className="page js-entrance">
       <div className="page-inner">
         <h1 className="display" data-enter>
-          events <span className="dim">— berlin</span>
+          events <span className="dim">—</span>
+          <br />
+          <span className="dim">berlin</span>
         </h1>
 
         {HOST_ORDER.map((host) => {
@@ -67,30 +61,16 @@ export default function EventsPage() {
               </div>
               {events.map((e) => {
                 const past = isPast(e);
-
-                /* passato o sold out: riga statica, niente link ticket */
-                if (past || e.soldOut) {
-                  return (
-                    <div
-                      key={e.id}
-                      className={`event-row${past ? " is-past" : " sold-out"}`}
-                      data-enter
-                    >
-                      <EventRowBody e={e} past={past} />
-                    </div>
-                  );
-                }
-
                 return (
                   <a
                     key={e.id}
-                    className="event-row"
-                    href={e.link || SITE.instagram}
+                    className={`event-row${past ? " is-past" : ""}`}
+                    href={e.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     data-enter
                   >
-                    <EventRowBody e={e} past={false} />
+                    <EventRowBody e={e} past={past} />
                   </a>
                 );
               })}
@@ -99,17 +79,15 @@ export default function EventsPage() {
         })}
 
         <p className="eyebrow" style={{ marginTop: "32px" }} data-enter>
-          tickets via stripe · zero ra fees — payment links land here first,
-          updates on{" "}
+          full history and tickets on{" "}
           <a
-            href={SITE.instagram}
+            href={RA_PROMOTER}
             target="_blank"
             rel="noopener noreferrer"
             className="u-link"
           >
-            {SITE.instagramHandle}
+            resident advisor ↗
           </a>
-          .
         </p>
       </div>
       <SiteFooter />

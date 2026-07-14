@@ -9,6 +9,6 @@ export const SITE = {
   bandcamp: "https://bluegold1.bandcamp.com/",
   instagram: "https://www.instagram.com/bluegold.wax/",
   instagramHandle: "@bluegold.wax",
-  /* nessun profilo RA trovato per bluegold: link alla ricerca RA */
-  ra: "https://ra.co/search?searchQuery=bluegold",
+  /* profilo promoter RA (AcidReflux) */
+  ra: "https://ra.co/promoters/157649",
 };
