@@ -133,6 +133,14 @@ button {
   transform-origin: top left;
 }
 
+/* in about, da desktop, il wordmark si nasconde (resta il suo
+   ingombro per non far saltare la nav) */
+@media (min-width: 721px) {
+  .wordmark-ghost {
+    visibility: hidden;
+  }
+}
+
 .main-nav {
   display: flex;
   gap: 4px;

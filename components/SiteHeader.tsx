@@ -62,7 +62,11 @@ export default function SiteHeader() {
   return (
     <>
       <header className="site-header">
-        <Link href="/" className="wordmark" aria-label="Bluegold — home">
+        <Link
+          href="/"
+          className={`wordmark${pathname === "/about" ? " wordmark-ghost" : ""}`}
+          aria-label="Bluegold — home"
+        >
           Bluegold
         </Link>
 
