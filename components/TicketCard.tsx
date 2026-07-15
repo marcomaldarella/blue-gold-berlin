@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import Image from "next/image";
 import type { Event } from "@/lib/events";
 
@@ -55,7 +56,10 @@ export default function TicketCard({ e }: { e: Event }) {
         </span>
       </button>
 
-      {open && (
+      {/* portal: il wrapper [data-enter] ha un transform inline che
+          intrappolerebbe il position:fixed */}
+      {open &&
+        createPortal(
         <div
           className="ticket-modal"
           role="dialog"
@@ -102,8 +106,9 @@ export default function TicketCard({ e }: { e: Event }) {
               </p>
             </div>
           </div>
-        </div>
-      )}
+        </div>,
+          document.body
+        )}
     </>
   );
 }
