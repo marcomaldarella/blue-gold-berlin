@@ -44,7 +44,7 @@ export const RELEASES: Release[] = [
     slug: "a-gate-to-the-forest",
     title: "A Gate To The Forest",
     artist: "Mariel Loah, Marijn S, BB. angel, Ayū",
-    catalog: "ar003",
+    catalog: "ar001",
     label: "acid reflux",
     cover: "/assets/a-gate-to-the-forest.jpg",
     url: "https://acidrefluxrecs.bandcamp.com/album/a-gate-to-the-forest",
@@ -66,6 +66,6 @@ export const RADIO_TRACKS = [
   { title: "mruda — theom", catalog: "bg001", albumId: 1993218674 },
   { title: "mruda — shape shifting", catalog: "bg002", albumId: 1658586204 },
   { title: "staktic — sequor", catalog: "bg003", albumId: 3720175905 },
-  { title: "mariel loah — a gate to the forest", catalog: "ar003", albumId: 3236638117 },
+  { title: "mariel loah — a gate to the forest", catalog: "ar001", albumId: 3236638117 },
   { title: "delta division — dead channel rituals", catalog: "ar004", albumId: 3288299294 },
 ];
