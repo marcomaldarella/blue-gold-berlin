@@ -630,9 +630,43 @@ button {
   display: block;
 }
 
+.np-group {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.np-group:hover {
+  color: #ffffff;
+}
+
 .np-group .cat {
   margin-left: auto;
   color: rgba(255, 255, 255, 0.4);
+}
+
+.np-caret {
+  flex-shrink: 0;
+  width: 12px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+/* fisarmonica: apertura fluida senza misurare le altezze */
+.np-tracks {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.np-tracks.is-open {
+  grid-template-rows: 1fr;
+}
+
+.np-tracks-inner {
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* ---- pannello player desktop: dentro il box, ancorato sopra ---- */

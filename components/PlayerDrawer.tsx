@@ -29,8 +29,17 @@ export default function PlayerDrawer() {
   const [drawerOpen, setDrawerOpen] = useState(false); // drawer mobile
   const [started, setStarted] = useState(false); // audio montato solo al primo play
   const [shuffle, setShuffle] = useState(false);
+  /* fisarmonica: una release aperta alla volta */
+  const [openGroup, setOpenGroup] = useState<string | null>(
+    RELEASES[0]?.catalog ?? null
+  );
 
   const track = PLAYLIST[current];
+
+  /* la release della traccia corrente si apre da sola */
+  useEffect(() => {
+    setOpenGroup(PLAYLIST[current].catalog);
+  }, [current]);
 
   /* /?track=N: seleziona la traccia e apre la lista */
   useEffect(() => {
@@ -88,14 +97,25 @@ export default function PlayerDrawer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started]);
 
+  const playRandom = () => {
+    if (PLAYLIST.length < 2) return;
+    let n = current;
+    while (n === current) n = Math.floor(Math.random() * PLAYLIST.length);
+    play(n);
+  };
+
   const step = (d: number) => {
-    if (shuffle && PLAYLIST.length > 1) {
-      let n = current;
-      while (n === current) n = Math.floor(Math.random() * PLAYLIST.length);
-      play(n);
+    if (shuffle) {
+      playRandom();
       return;
     }
     play((current + d + PLAYLIST.length) % PLAYLIST.length);
+  };
+
+  /* shuffle: all'attivazione parte subito una traccia a caso */
+  const toggleShuffle = () => {
+    if (!shuffle) playRandom();
+    setShuffle((v) => !v);
   };
 
   const seek = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +143,7 @@ export default function PlayerDrawer() {
         className={`np-shuffle${shuffle ? " is-on" : ""}`}
         aria-pressed={shuffle}
         aria-label="shuffle"
-        onClick={() => setShuffle((v) => !v)}
+        onClick={toggleShuffle}
       >
         shuffle
       </button>
@@ -147,37 +167,53 @@ export default function PlayerDrawer() {
 
   const list = (
     <ul className="pp-list">
-      {RELEASES.map((r) => (
-        <li key={r.slug}>
-          <div className="np-group">
-            <img src={r.cover} alt="" width={28} height={28} />
-            <span>
-              {r.artist} — {r.title}
-            </span>
-            <span className="cat">{r.catalog}</span>
-          </div>
-          <ul className="pp-list">
-            {r.tracks.map((t) => {
-              const idx = PLAYLIST.findIndex((p) => p.file === t.file);
-              return (
-                <li key={t.file}>
-                  <button
-                    className={`pp-item${idx === current ? " is-current" : ""}`}
-                    onClick={() => play(idx)}
-                  >
-                    <span className="num">
-                      {idx === current && playing ? "▶" : String(idx + 1).padStart(2, "0")}
-                    </span>
-                    <span className="title">
-                      {t.artist} — {t.title}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
-        </li>
-      ))}
+      {RELEASES.map((r) => {
+        const isOpen = openGroup === r.catalog;
+        return (
+          <li key={r.slug}>
+            <button
+              className={`np-group${isOpen ? " is-open" : ""}`}
+              aria-expanded={isOpen}
+              onClick={() =>
+                setOpenGroup((g) => (g === r.catalog ? null : r.catalog))
+              }
+            >
+              <img src={r.cover} alt="" width={28} height={28} />
+              <span>
+                {r.artist} — {r.title}
+              </span>
+              <span className="cat">{r.catalog}</span>
+              <span className="np-caret">{isOpen ? "–" : "+"}</span>
+            </button>
+            <div className={`np-tracks${isOpen ? " is-open" : ""}`}>
+              <div className="np-tracks-inner">
+                <ul className="pp-list">
+                  {r.tracks.map((t) => {
+                    const idx = PLAYLIST.findIndex((p) => p.file === t.file);
+                    return (
+                      <li key={t.file}>
+                        <button
+                          className={`pp-item${idx === current ? " is-current" : ""}`}
+                          onClick={() => play(idx)}
+                        >
+                          <span className="num">
+                            {idx === current && playing
+                              ? "▶"
+                              : String(idx + 1).padStart(2, "0")}
+                          </span>
+                          <span className="title">
+                            {t.artist} — {t.title}
+                          </span>
+                        </button>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            </div>
+          </li>
+        );
+      })}
     </ul>
   );
 
