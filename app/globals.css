@@ -543,9 +543,19 @@ button {
 
 /* frecce avanti/indietro più leggibili del testo */
 .np-transport button:first-child,
-.np-transport button:last-child {
+.np-transport button:nth-child(3) {
   font-size: 15px;
   line-height: 1;
+}
+
+.np-shuffle {
+  margin-left: auto;
+}
+
+.np-shuffle.is-on {
+  color: #ffffff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .np-transport button:hover,

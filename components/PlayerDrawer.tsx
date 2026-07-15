@@ -28,6 +28,7 @@ export default function PlayerDrawer() {
   const [listOpen, setListOpen] = useState(false); // pannello desktop
   const [drawerOpen, setDrawerOpen] = useState(false); // drawer mobile
   const [started, setStarted] = useState(false); // audio montato solo al primo play
+  const [shuffle, setShuffle] = useState(false);
 
   const track = PLAYLIST[current];
 
@@ -87,8 +88,15 @@ export default function PlayerDrawer() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [started]);
 
-  const step = (d: number) =>
+  const step = (d: number) => {
+    if (shuffle && PLAYLIST.length > 1) {
+      let n = current;
+      while (n === current) n = Math.floor(Math.random() * PLAYLIST.length);
+      play(n);
+      return;
+    }
     play((current + d + PLAYLIST.length) % PLAYLIST.length);
+  };
 
   const seek = (e: React.ChangeEvent<HTMLInputElement>) => {
     const a = audioRef.current;
@@ -110,6 +118,14 @@ export default function PlayerDrawer() {
       </button>
       <button aria-label="next track" onClick={() => step(1)}>
         →
+      </button>
+      <button
+        className={`np-shuffle${shuffle ? " is-on" : ""}`}
+        aria-pressed={shuffle}
+        aria-label="shuffle"
+        onClick={() => setShuffle((v) => !v)}
+      >
+        shuffle
       </button>
     </div>
   );
