@@ -27,7 +27,30 @@ const CONFIG = {
   feed: 0.054,
   kill: 0.0616,
   iterations: 10,
+  grain: 0.16,
 };
+
+/* post-process: grana animata screen-space sopra il composite */
+const GRAIN_FRAG = /* glsl */ `
+precision highp float;
+uniform sampler2D inputMap;
+uniform float uTime;
+uniform float uAmount;
+varying vec2 vUv;
+
+float hash(vec2 p) {
+  return fract(sin(dot(p + fract(uTime), vec2(127.1, 311.7))) * 43758.5453);
+}
+
+void main() {
+  vec3 col = texture2D(inputMap, vUv).rgb;
+  float g = hash(gl_FragCoord.xy) - 0.5;
+  float lum = col.r + col.g + col.b;
+  /* la grana morde i mezzitoni, respira meno sui neri pieni */
+  col += g * uAmount * (0.4 + 0.6 * smoothstep(0.0, 0.5, lum));
+  gl_FragColor = vec4(col, 1.0);
+}
+`;
 
 /**
  * Porting React del "fluidglass" di chiuhans111 (Vue+OGL):
@@ -118,6 +141,11 @@ export default function FluidGlass() {
       brightFactor: { value: CONFIG.bright },
       parallax: { value: [0, 0] },
     });
+    const grainPass = makeShader(GRAIN_FRAG, {
+      inputMap: { value: 0 },
+      uTime: { value: 0 },
+      uAmount: { value: CONFIG.grain },
+    });
 
     /* ---- render targets ---- */
     const renderTargets = [];
@@ -141,6 +169,16 @@ export default function FluidGlass() {
     const pressureTemp = createRT(true);
     const velocity = createRT();
     const velocityTemp = createRT(true);
+
+    /* composite a piena risoluzione: il vetro ci renderizza dentro,
+       la grana lo porta a schermo */
+    const composite = new RenderTarget(gl, {
+      width: 512,
+      height: 512,
+      depth: false,
+      wrapS: gl.CLAMP_TO_EDGE,
+      wrapT: gl.CLAMP_TO_EDGE,
+    });
 
     const flowmap = new Flowmap(gl, {
       size: 512,
@@ -220,6 +258,7 @@ export default function FluidGlass() {
     function resize() {
       const rect = root.getBoundingClientRect();
       renderer.setSize(rect.width, rect.height);
+      composite.setSize(Math.max(4, Math.round(rect.width)), Math.max(4, Math.round(rect.height)));
       setSizeNeeded = true;
     }
     function mousemove(e) {
@@ -341,11 +380,16 @@ export default function FluidGlass() {
           now.getSeconds() + now.getMilliseconds() / 1000,
         ],
       });
-      glassShading(null, {
+      glassShading(composite, {
         pressureMap: pressure.texture,
         backgroundMap: background.texture,
         uSize: [pressure.texture.width, pressure.texture.height],
         parallax: [parallax.x, parallax.y],
+      });
+      grainPass(null, {
+        inputMap: composite.texture,
+        uTime: (performance.now() % 100000) / 1000,
+        uAmount: CONFIG.grain,
       });
     }
     requestAnimationFrame(update);
