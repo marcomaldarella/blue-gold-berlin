@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     description: SITE.description,
     url: SITE.url,
     siteName: SITE.name,
-    images: [{ url: "/assets/bluegold-blue.png", width: 928, height: 928 }],
+    images: [{ url: "/assets/og.jpg", width: 1200, height: 630 }],
     locale: "en_US",
     type: "website",
   },
@@ -56,7 +56,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: `${SITE.name} — Berlin`,
     description: SITE.description,
-    images: ["/assets/bluegold-blue.png"],
+    images: ["/assets/og.jpg"],
   },
   icons: {
     icon: [
