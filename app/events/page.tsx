@@ -33,7 +33,7 @@ function EventRowBody({ e, past }: { e: Event; past: boolean }) {
           {e.raPick ? " · ra pick" : ""}
         </div>
       </div>
-      <div className="event-buy">{past ? "on ra ↗" : "tickets ↗"}</div>
+      <div className="event-buy">{past ? "past" : "tickets ↗"}</div>
     </>
   );
 }
@@ -61,16 +61,26 @@ export default function EventsPage() {
               </div>
               {events.map((e) => {
                 const past = isPast(e);
+
+                /* eventi passati: riga statica, link spento */
+                if (past) {
+                  return (
+                    <div key={e.id} className="event-row is-past" data-enter>
+                      <EventRowBody e={e} past />
+                    </div>
+                  );
+                }
+
                 return (
                   <a
                     key={e.id}
-                    className={`event-row${past ? " is-past" : ""}`}
+                    className="event-row"
                     href={e.link}
                     target="_blank"
                     rel="noopener noreferrer"
                     data-enter
                   >
-                    <EventRowBody e={e} past={past} />
+                    <EventRowBody e={e} past={false} />
                   </a>
                 );
               })}
