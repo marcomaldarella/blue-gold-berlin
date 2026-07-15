@@ -27,14 +27,20 @@ export default function AboutPage() {
             </div>
             <div data-enter>
               <p>
-                <strong>bluegold</strong> is a record label and studio based in{" "}
-                <strong>berlin</strong>, founded by mruda. straight from the
-                sleeve: sound design for altered states of mind.
+                <strong>bluegold</strong> is a music label and trance-inducing
+                ritual, grounded in techno but unbound by genre — run by{" "}
+                <strong>mariel loah aka mruda</strong>, berlin. sound design
+                for altered states of mind.
               </p>
               <p>
-                deep, introspective electronics in small runs, at a relentless
-                pace — everything purchasable on bandcamp. off record:
-                listening sessions, club nights and open-airs around berlin.
+                its core is psychedelic, euphoric and hallucinatory: a ceremony
+                through sound, guiding the crowd through a collective journey —
+                descending into shadow, learning to surrender, dancing with our
+                demons.
+              </p>
+              <p>
+                a temple of shimmer in the mud. the pulse of a forest rite,
+                stitched with silver dreams and golden chaos.
               </p>
             </div>
           </section>

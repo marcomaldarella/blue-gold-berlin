@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
+import SubscribeForm from "@/components/SubscribeForm";
 import { EVENTS, HOST_ORDER, RA_PROMOTER, type Event } from "@/lib/events";
 
 export const metadata: Metadata = {
@@ -100,6 +101,8 @@ export default function EventsPage() {
             </section>
           );
         })}
+
+        <SubscribeForm />
 
         <p className="eyebrow" style={{ marginTop: "32px" }} data-enter>
           full history and tickets on{" "}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import PageEntrance from "@/components/PageEntrance";
 import SiteFooter from "@/components/SiteFooter";
+import SubscribeForm from "@/components/SubscribeForm";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -68,6 +69,8 @@ export default function ContactPage() {
             <span>berlin, germany</span>
           </li>
         </ul>
+
+        <SubscribeForm />
       </div>
       <SiteFooter />
       <PageEntrance />

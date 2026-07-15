@@ -1232,6 +1232,82 @@ button.radio-item:hover {
   flex-shrink: 0;
 }
 
+/* ---- subscribe: stay updated on the next events ---- */
+.subscribe {
+  margin-top: clamp(28px, 5vh, 44px);
+  max-width: 420px;
+}
+
+.subscribe-label {
+  display: block;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-ls);
+  color: var(--faint);
+  margin-bottom: 10px;
+}
+
+.subscribe-row {
+  display: flex;
+  gap: 8px;
+}
+
+.subscribe input {
+  flex: 1;
+  min-width: 0;
+  background: rgba(255, 255, 255, 0.05);
+  border: 0.5px solid var(--hairline);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-s);
+  font-weight: var(--w-light);
+  letter-spacing: 0.02em;
+  padding: 11px 12px;
+  outline: none;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.subscribe input::placeholder {
+  color: var(--faint-soft);
+}
+
+.subscribe input:focus {
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.subscribe button {
+  background: #ffffff;
+  color: #0a0a0a;
+  font-family: var(--font-display);
+  font-size: var(--label-size);
+  font-weight: var(--w-regular);
+  letter-spacing: 0.06em;
+  padding: 11px 18px;
+  transition: background 0.2s ease;
+}
+
+.subscribe button:hover {
+  background: #e8e8e6;
+}
+
+.subscribe button:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.subscribe-done,
+.subscribe-error {
+  display: block;
+  font-size: var(--label-size);
+  letter-spacing: var(--label-ls);
+  color: var(--ink);
+}
+
+.subscribe-error {
+  margin-top: 8px;
+  color: var(--faint);
+}
+
 /* ---- footer pagine interne: stesse targhette della navbar,
        a filo dei bordi bassi ---- */
 .site-footer {
