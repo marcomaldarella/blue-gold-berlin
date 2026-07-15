@@ -32,9 +32,9 @@ export default function AboutPage() {
                 sleeve: sound design for altered states of mind.
               </p>
               <p>
-                deep, introspective electronics in small runs, at a slow pace —
-                everything purchasable on bandcamp. off record: listening
-                sessions, club nights and open-airs around berlin.
+                deep, introspective electronics in small runs, at a relentless
+                pace — everything purchasable on bandcamp. off record:
+                listening sessions, club nights and open-airs around berlin.
               </p>
             </div>
           </section>
