@@ -3,6 +3,7 @@ import Image from "next/image";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import SubscribeForm from "@/components/SubscribeForm";
+import TicketCard from "@/components/TicketCard";
 import { EVENTS, HOST_ORDER, RA_PROMOTER, type Event } from "@/lib/events";
 
 export const metadata: Metadata = {
@@ -84,17 +85,11 @@ export default function EventsPage() {
                     );
                   }
 
+                  /* upcoming: modale tickets senza uscire dalla pagina */
                   return (
-                    <a
-                      key={e.id}
-                      className="event-card"
-                      href={e.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      data-enter
-                    >
-                      <EventCardBody e={e} past={false} />
-                    </a>
+                    <div key={e.id} data-enter>
+                      <TicketCard e={e} />
+                    </div>
                   );
                 })}
               </div>
