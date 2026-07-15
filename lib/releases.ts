@@ -54,7 +54,7 @@ export const RELEASES: Release[] = [
     slug: "dead-channels-ritual",
     title: "Dead Channels Ritual",
     artist: "Delta Division",
-    catalog: "ar004",
+    catalog: "ar002",
     label: "acid reflux",
     cover: "/assets/dead-channels-ritual.jpg",
     url: "https://acidrefluxrecs.bandcamp.com/album/dead-channels-ritual",
@@ -67,5 +67,5 @@ export const RADIO_TRACKS = [
   { title: "mruda — shape shifting", catalog: "bg002", albumId: 1658586204 },
   { title: "staktic — sequor", catalog: "bg003", albumId: 3720175905 },
   { title: "mariel loah — a gate to the forest", catalog: "ar001", albumId: 3236638117 },
-  { title: "delta division — dead channel rituals", catalog: "ar004", albumId: 3288299294 },
+  { title: "delta division — dead channel rituals", catalog: "ar002", albumId: 3288299294 },
 ];
