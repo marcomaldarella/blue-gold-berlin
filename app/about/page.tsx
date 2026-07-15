@@ -88,6 +88,18 @@ export default function AboutPage() {
 
           </section>
         </div>
+
+        {/* elemento grafico di chiusura: wide su mobile,
+            a destra sopra il footer su desktop */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          className="about-mark"
+          src="/assets/logo-title.svg"
+          alt=""
+          width={1044}
+          height={655}
+          data-enter
+        />
       </div>
       <SiteFooter />
       <PageEntrance />

@@ -1473,6 +1473,23 @@ button.radio-item:hover {
   color: var(--faint);
 }
 
+/* ---- marchio grafico a fine about ---- */
+.about-mark {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin-top: clamp(36px, 7vh, 64px);
+}
+
+@media (min-width: 721px) {
+  /* da web: grande quanto il blocco footer di destra, sopra di lui */
+  .about-mark {
+    width: clamp(240px, 24vw, 340px);
+    margin-left: auto;
+    margin-right: 0;
+  }
+}
+
 /* ---- footer pagine interne: stesse targhette della navbar,
        a filo dei bordi bassi ---- */
 .site-footer {
