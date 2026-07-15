@@ -99,7 +99,7 @@ export default function PlayerDrawer() {
   const transport = (
     <div className="np-transport">
       <button aria-label="previous track" onClick={() => step(-1)}>
-        prev
+        ←
       </button>
       <button
         className="np-play"
@@ -109,7 +109,7 @@ export default function PlayerDrawer() {
         {playing ? "pause" : "play"}
       </button>
       <button aria-label="next track" onClick={() => step(1)}>
-        next
+        →
       </button>
     </div>
   );

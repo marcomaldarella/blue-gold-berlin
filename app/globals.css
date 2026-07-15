@@ -541,6 +541,13 @@ button {
   transition: color 0.2s ease;
 }
 
+/* frecce avanti/indietro più leggibili del testo */
+.np-transport button:first-child,
+.np-transport button:last-child {
+  font-size: 15px;
+  line-height: 1;
+}
+
 .np-transport button:hover,
 .np-transport .np-play {
   color: #ffffff;
