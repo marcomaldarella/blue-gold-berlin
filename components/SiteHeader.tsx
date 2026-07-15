@@ -107,6 +107,16 @@ export default function SiteHeader() {
             ))}
           </nav>
 
+          {/* loghetto centrato subito sotto le voci */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            className="menu-mark"
+            src="/assets/logo-little.svg"
+            alt=""
+            width={52}
+            height={54}
+          />
+
           {/* stay updated: subito dopo contact */}
           <div className="menu-subscribe">
             <SubscribeForm />

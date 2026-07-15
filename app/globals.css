@@ -249,12 +249,23 @@ button {
   animation: menu-fade 0.4s ease 0.28s forwards;
 }
 
+/* loghetto sotto le voci: entra in coda allo stagger */
+.menu-mark {
+  display: block;
+  width: 52px;
+  height: auto;
+  margin-top: clamp(24px, 4vh, 36px);
+  opacity: 0;
+  transform: translateY(14px);
+  animation: menu-item-in 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+}
+
 /* subscribe dentro il menu, sotto contact */
 .menu-subscribe {
   width: min(340px, 82vw);
-  margin-top: clamp(28px, 5vh, 44px);
+  margin-top: clamp(24px, 4vh, 36px);
   opacity: 0;
-  animation: menu-fade 0.4s ease 0.32s forwards;
+  animation: menu-fade 0.4s ease 0.38s forwards;
 }
 
 .menu-subscribe .subscribe {
