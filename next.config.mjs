@@ -1,5 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  async redirects() {
+    return [
+      /* la vecchia pagina tickets del sito Cloudflare: chi ha il
+         link non deve finire in 404 dopo lo switch DNS */
+      { source: "/tickets", destination: "/events", permanent: false },
+    ];
+  },
   async headers() {
     return [
       {
