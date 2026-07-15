@@ -287,9 +287,16 @@ export default function FluidGlass({ withMask = true, dim = false }) {
       /* lettering solo dove richiesto (home) */
       if (!maskRef.current || !type.canvas) return;
 
+      /* fit dentro entrambi gli assi: il type nuovo è quasi quadrato */
       const portrait = canvas.width < canvas.height;
-      const w = canvas.width * (portrait ? 0.76 : 0.56);
-      const h = w / type.ratio;
+      const maxW = canvas.width * (portrait ? 0.78 : 0.5);
+      const maxH = canvas.height * 0.64;
+      let w = maxW;
+      let h = w / type.ratio;
+      if (h > maxH) {
+        h = maxH;
+        w = h * type.ratio;
+      }
       ctx.drawImage(type.canvas, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
     }
 

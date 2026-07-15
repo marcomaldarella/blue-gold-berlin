@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import SubscribeForm from "@/components/SubscribeForm";
 import { SITE } from "@/lib/site";
 
 const LINKS = [
@@ -105,6 +106,11 @@ export default function SiteHeader() {
               </Link>
             ))}
           </nav>
+
+          {/* stay updated: subito dopo contact */}
+          <div className="menu-subscribe">
+            <SubscribeForm />
+          </div>
           <div className="menu-overlay-footer">
             <span className="copyright">©2026</span>
             <span className="socials">

@@ -249,6 +249,26 @@ button {
   animation: menu-fade 0.4s ease 0.28s forwards;
 }
 
+/* subscribe dentro il menu, sotto contact */
+.menu-subscribe {
+  width: min(340px, 82vw);
+  margin-top: clamp(28px, 5vh, 44px);
+  opacity: 0;
+  animation: menu-fade 0.4s ease 0.32s forwards;
+}
+
+.menu-subscribe .subscribe {
+  margin-top: 0;
+}
+
+.menu-subscribe .subscribe-label {
+  text-align: center;
+}
+
+.menu-subscribe .subscribe-done {
+  text-align: center;
+}
+
 @keyframes menu-fade {
   to {
     opacity: 1;
