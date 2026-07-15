@@ -25,7 +25,8 @@ export const EVENTS: Event[] = [
     venue: "Secret Location, Berlin",
     date: "18 jul 2026",
     iso: "2026-07-18",
-    link: RA_PROMOTER,
+    /* Stripe payment link live (15€) */
+    link: "https://buy.stripe.com/7sYcMYaRP3mp88ngL72wU00",
   },
   {
     id: "ev-refx-elicit-fitzroy",
