@@ -26,7 +26,7 @@ const CONFIG = {
   feed: 0.054,
   kill: 0.0616,
   iterations: 10,
-  grain: 0.13,
+  grain: 0.09,
 };
 
 /* post-process: grana fine + campo stelle nei neri (space) */
