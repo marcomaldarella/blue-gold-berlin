@@ -1,164 +1,165 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import gsap from "gsap";
-import { RADIO_TRACKS } from "@/lib/releases";
-import { SITE } from "@/lib/site";
+/* eslint-disable @next/next/no-img-element */
+import { AUDIO_BASE, PLAYLIST, RELEASES } from "@/lib/releases";
 
-/* embed Bandcamp in toni bianchi su fondo ink */
-const largeSrc = (albumId: number) =>
-  `https://bandcamp.com/EmbeddedPlayer/album=${albumId}/size=large/bgcol=0c0c0c/linkcol=e8e8e6/tracklist=false/artwork=small/transparent=true/`;
+const src = (file: string) => `${AUDIO_BASE}/${file}.mp3`;
+
+const fmt = (s: number) => {
+  if (!isFinite(s) || s < 0) return "0:00";
+  const m = Math.floor(s / 60);
+  return `${m}:${String(Math.floor(s % 60)).padStart(2, "0")}`;
+};
 
 /**
- * Player della home:
- * - desktop: il box nero in basso a sinistra contiene direttamente
- *   la barra Bandcamp small (42px) già attiva, montata a idle dopo
- *   il first paint (niente click, niente peso sull'LCP). Il click
- *   sulla testata del box apre il pannello con la lista dei 5
- *   brani per cambiare traccia — un solo iframe su desktop;
- * - mobile: pattern del drawer dal PDF, lista + embed large dentro
- *   il pannello, montati alla prima apertura.
+ * Player nativo del catalogo: un solo <audio>, playlist completa
+ * delle release con artwork. Desktop: box nero in basso a sinistra
+ * con transport + lista a pannello; mobile: drawer dal basso.
+ * Montato nel layout: la musica continua tra le pagine.
  * Supporta /?track=N (dalle righe radio in about).
  */
 export default function PlayerDrawer() {
-  const drawerRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const openRef = useRef(false);
-  const [open, setOpen] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(false); // lista desktop
-  const [mountedBox, setMountedBox] = useState(false); // barra small
-  const [mountedDrawer, setMountedDrawer] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
   const [current, setCurrent] = useState(0);
+  const [playing, setPlaying] = useState(false);
+  const [time, setTime] = useState(0);
+  const [dur, setDur] = useState(0);
+  const [listOpen, setListOpen] = useState(false); // pannello desktop
+  const [drawerOpen, setDrawerOpen] = useState(false); // drawer mobile
+  const [started, setStarted] = useState(false); // audio montato solo al primo play
 
-  const reduce = () =>
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const track = PLAYLIST[current];
 
-  const panelHeight = () => panelRef.current?.offsetHeight ?? 87;
-
-  const setDrawer = (isOpen: boolean, animate: boolean) => {
-    const el = drawerRef.current;
-    if (!el) return;
-    openRef.current = isOpen;
-    setOpen(isOpen);
-    if (isOpen) setMountedDrawer(true);
-    const apply = () => {
-      const y = isOpen ? 0 : panelHeight();
-      if (!animate || reduce()) {
-        gsap.set(el, { y });
-      } else {
-        gsap.to(el, { y, duration: 0.45, ease: "power3.out", overwrite: true });
-      }
-    };
-    /* il mount della lista/iframe cambia l'altezza: misura al frame dopo */
-    requestAnimationFrame(apply);
-  };
-
-  /* stato iniziale: drawer chiuso; /?track=N apre lista/drawer */
+  /* /?track=N: seleziona la traccia e apre la lista */
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const t = params.get("track");
-    const idx = t === null ? -1 : parseInt(t, 10);
-    const valid = idx >= 0 && idx < RADIO_TRACKS.length;
-    if (valid) setCurrent(idx);
+    const t = new URLSearchParams(window.location.search).get("track");
+    if (t === null) return;
+    const idx = parseInt(t, 10);
+    if (idx >= 0 && idx < PLAYLIST.length) {
+      setCurrent(idx);
+      if (window.matchMedia("(max-width: 720px)").matches) setDrawerOpen(true);
+      else setListOpen(true);
+    }
+  }, []);
 
-    const isMobile = window.matchMedia("(max-width: 720px)").matches;
-    if (valid && !isMobile) setPanelOpen(true);
-    setDrawer(Boolean(valid && isMobile), false);
-
-    const onResize = () => setDrawer(openRef.current, false);
-    window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+  /* cambio traccia: aggiorna src e riparte se stava suonando */
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a || !started) return;
+    a.src = src(track.file);
+    a.load();
+    if (playing) a.play().catch(() => setPlaying(false));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [current, started]);
 
-  /* desktop: la barra small appare da sola subito dopo il first
-     paint (requestIdleCallback, fallback timeout) */
-  useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 720px)").matches;
-    if (isMobile) return;
-    const cb = () => setMountedBox(true);
-    if ("requestIdleCallback" in window) {
-      const id = window.requestIdleCallback(cb, { timeout: 1500 });
-      return () => window.cancelIdleCallback(id);
+  const play = (idx?: number) => {
+    if (typeof idx === "number" && idx !== current) {
+      setCurrent(idx);
+      setPlaying(true);
+      setStarted(true);
+      return; /* l'effect sopra fa partire il nuovo src */
     }
-    const t = setTimeout(cb, 300);
-    return () => clearTimeout(t);
-  }, []);
-
-  /* drag dell'handler: segue il dito, poi snap open/closed */
-  const dragStart = useRef<{ y: number; base: number } | null>(null);
-
-  const onTouchStart = (e: React.TouchEvent) => {
-    dragStart.current = {
-      y: e.touches[0].clientY,
-      base: openRef.current ? 0 : panelHeight(),
-    };
-  };
-
-  const onTouchMove = (e: React.TouchEvent) => {
-    const el = drawerRef.current;
-    if (!el || !dragStart.current) return;
-    const delta = e.touches[0].clientY - dragStart.current.y;
-    const y = Math.min(
-      panelHeight(),
-      Math.max(0, dragStart.current.base + delta)
-    );
-    gsap.set(el, { y });
-  };
-
-  const onTouchEnd = (e: React.TouchEvent) => {
-    if (!dragStart.current) return;
-    const delta = e.changedTouches[0].clientY - dragStart.current.y;
-    const wasOpen = dragStart.current.base === 0;
-    dragStart.current = null;
-    if (Math.abs(delta) < 8) {
-      setDrawer(!wasOpen, true);
+    const a = audioRef.current;
+    setStarted(true);
+    if (!a) {
+      setPlaying(true);
+      return;
+    }
+    if (a.paused) {
+      if (!a.src) a.src = src(track.file);
+      a.play().catch(() => setPlaying(false));
+      setPlaying(true);
     } else {
-      setDrawer(delta < 0, true);
+      a.pause();
+      setPlaying(false);
     }
   };
 
-  /* desktop: lista "tirabile" — pointer drag sul bordo del box */
-  const deskDrag = useRef<{ y: number; moved: boolean } | null>(null);
-
-  const onBoxPointerDown = (e: React.PointerEvent) => {
-    deskDrag.current = { y: e.clientY, moved: false };
-    (e.target as HTMLElement).setPointerCapture?.(e.pointerId);
-  };
-
-  const onBoxPointerMove = (e: React.PointerEvent) => {
-    if (!deskDrag.current) return;
-    const delta = e.clientY - deskDrag.current.y;
-    if (delta < -16 && !panelOpen) {
-      setPanelOpen(true);
-      deskDrag.current.moved = true;
-    } else if (delta > 16 && panelOpen) {
-      setPanelOpen(false);
-      deskDrag.current.moved = true;
+  /* primo mount dell'audio: se il play è stato chiesto, parte */
+  useEffect(() => {
+    const a = audioRef.current;
+    if (!a || !started) return;
+    if (playing && a.paused) {
+      if (!a.src) a.src = src(track.file);
+      a.play().catch(() => setPlaying(false));
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [started]);
+
+  const step = (d: number) =>
+    play((current + d + PLAYLIST.length) % PLAYLIST.length);
+
+  const seek = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const a = audioRef.current;
+    if (!a || !dur) return;
+    a.currentTime = (parseFloat(e.target.value) / 1000) * dur;
   };
 
-  const onBoxPointerUp = (e: React.PointerEvent) => {
-    const d = deskDrag.current;
-    deskDrag.current = null;
-    /* tap secco senza drag = toggle (sostituisce il click) */
-    if (d && !d.moved && Math.abs(e.clientY - d.y) < 8) {
-      setPanelOpen((v) => !v);
-    }
-  };
+  const transport = (
+    <div className="np-transport">
+      <button aria-label="previous track" onClick={() => step(-1)}>
+        prev
+      </button>
+      <button
+        className="np-play"
+        aria-label={playing ? "pause" : "play"}
+        onClick={() => play()}
+      >
+        {playing ? "pause" : "play"}
+      </button>
+      <button aria-label="next track" onClick={() => step(1)}>
+        next
+      </button>
+    </div>
+  );
 
-  const trackList = (
+  const seekbar = (
+    <div className="np-seek">
+      <span className="np-time">{fmt(time)}</span>
+      <input
+        type="range"
+        min={0}
+        max={1000}
+        value={dur ? Math.round((time / dur) * 1000) : 0}
+        onChange={seek}
+        aria-label="seek"
+      />
+      <span className="np-time">{fmt(dur)}</span>
+    </div>
+  );
+
+  const list = (
     <ul className="pp-list">
-      {RADIO_TRACKS.map((t, i) => (
-        <li key={t.catalog}>
-          <button
-            className={`pp-item${i === current ? " is-current" : ""}`}
-            onClick={() => setCurrent(i)}
-          >
-            <span className="num">{String(i + 1).padStart(2, "0")}</span>
-            <span className="title">{t.title}</span>
-            <span className="cat">{t.catalog}</span>
-          </button>
+      {RELEASES.map((r) => (
+        <li key={r.slug}>
+          <div className="np-group">
+            <img src={r.cover} alt="" width={28} height={28} />
+            <span>
+              {r.artist} — {r.title}
+            </span>
+            <span className="cat">{r.catalog}</span>
+          </div>
+          <ul className="pp-list">
+            {r.tracks.map((t) => {
+              const idx = PLAYLIST.findIndex((p) => p.file === t.file);
+              return (
+                <li key={t.file}>
+                  <button
+                    className={`pp-item${idx === current ? " is-current" : ""}`}
+                    onClick={() => play(idx)}
+                  >
+                    <span className="num">
+                      {idx === current && playing ? "▶" : String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <span className="title">
+                      {t.artist} — {t.title}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
         </li>
       ))}
     </ul>
@@ -166,111 +167,75 @@ export default function PlayerDrawer() {
 
   return (
     <>
-      {/* desktop: box nero col player attivo; il pannello-lista vive
-          DENTRO il box, ancorato sopra (bottom: 100%) */}
+      {started && (
+        <audio
+          ref={audioRef}
+          preload="none"
+          onTimeUpdate={(e) => setTime(e.currentTarget.currentTime)}
+          onDurationChange={(e) => setDur(e.currentTarget.duration)}
+          onEnded={() => step(1)}
+          onPause={() => setPlaying(false)}
+          onPlay={() => setPlaying(true)}
+        />
+      )}
+
+      {/* ---- desktop: box in basso a sinistra ---- */}
       <div className="player-box">
-        <div className={`player-panel${panelOpen ? " is-open" : ""}`}>
-        <div className="pp-header">
-          <span>bluegold radio · {RADIO_TRACKS.length} tracks</span>
-          <button
-            className="pp-close"
-            aria-label="close track list"
-            onClick={() => setPanelOpen(false)}
-            tabIndex={panelOpen ? 0 : -1}
-          >
-            ×
-          </button>
+        <div className="player-panel-wrap">
+          {listOpen && (
+            <div className="player-panel is-open">
+              <div className="pp-header">
+                <span>bluegold radio · {PLAYLIST.length} tracks</span>
+                <button className="pp-close" onClick={() => setListOpen(false)}>
+                  ×
+                </button>
+              </div>
+              {list}
+            </div>
+          )}
         </div>
-          {trackList}
-        </div>
+
         <button
           className="pb-head"
-          aria-expanded={panelOpen}
-          aria-label={panelOpen ? "close track list" : "open track list"}
-          onPointerDown={onBoxPointerDown}
-          onPointerMove={onBoxPointerMove}
-          onPointerUp={onBoxPointerUp}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") setPanelOpen((v) => !v);
-          }}
+          onClick={() => setListOpen((v) => !v)}
+          aria-expanded={listOpen}
+          aria-label="toggle tracklist"
         >
-          <span className="pb-handle" aria-hidden="true" />
+          <span className="pb-handle" />
           <span className="pb-track">
-            {String(current + 1).padStart(2, "0")}{" "}
-            {RADIO_TRACKS[current].title}
+            {String(current + 1).padStart(2, "0")} {track.artist} — {track.title}
           </span>
         </button>
-        {mountedBox && (
-          <div className="pb-embed">
-            <iframe
-              src={largeSrc(RADIO_TRACKS[current].albumId)}
-              title={`bluegold radio — ${RADIO_TRACKS[current].title}`}
-              seamless
-              allow="autoplay"
-            />
+
+        <div className="np-body">
+          <img className="np-art" src={track.cover} alt="" width={54} height={54} />
+          <div className="np-main">
+            {seekbar}
+            {transport}
           </div>
-        )}
+        </div>
       </div>
 
-      {/* mobile: drawer col trattino */}
-      <div className="player-drawer" ref={drawerRef}>
+      {/* ---- mobile: drawer dal basso ---- */}
+      <div className={`player-drawer${drawerOpen ? " is-open" : ""}`}>
         <button
           className="drawer-handle"
-          aria-expanded={open}
-          aria-label={open ? "close player" : "open player"}
-          onClick={() => setDrawer(!openRef.current, true)}
-          onTouchStart={onTouchStart}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
+          onClick={() => setDrawerOpen((v) => !v)}
+          aria-expanded={drawerOpen}
+          aria-label="toggle player"
         />
-        <div className="drawer-panel" ref={panelRef}>
-          {mountedDrawer ? (
-            <div className="drawer-player">
-              {trackList}
-              <div className="pp-embed">
-                <iframe
-                  src={largeSrc(RADIO_TRACKS[current].albumId)}
-                  title={`bluegold radio — ${RADIO_TRACKS[current].title}`}
-                  seamless
-                  allow="autoplay"
-                />
-              </div>
+        <div className="drawer-panel">
+          <div className="np-body">
+            <img className="np-art" src={track.cover} alt="" width={54} height={54} />
+            <div className="np-main">
+              <span className="pb-track">
+                {track.artist} — {track.title}
+              </span>
+              {seekbar}
+              {transport}
             </div>
-          ) : (
-            <span className="player-label">
-              {String(current + 1).padStart(2, "0")}{" "}
-              {RADIO_TRACKS[current].title}
-            </span>
-          )}
-          <div className="drawer-footer">
-            <span className="copyright">©2026</span>
-            <span className="socials">
-              <a
-                href={SITE.bandcamp}
-                target="_blank"
-                rel="noopener noreferrer"
-                tabIndex={open ? 0 : -1}
-              >
-                bandcamp
-              </a>
-              <a
-                href={SITE.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                tabIndex={open ? 0 : -1}
-              >
-                instagram
-              </a>
-              <a
-                href={SITE.ra}
-                target="_blank"
-                rel="noopener noreferrer"
-                tabIndex={open ? 0 : -1}
-              >
-                resident advisor
-              </a>
-            </span>
           </div>
+          {drawerOpen && <div className="drawer-player">{list}</div>}
         </div>
       </div>
     </>

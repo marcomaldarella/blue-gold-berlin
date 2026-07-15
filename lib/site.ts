@@ -10,5 +10,5 @@ export const SITE = {
   instagram: "https://www.instagram.com/bluegold.wax/",
   instagramHandle: "@bluegold.wax",
   /* profilo promoter RA (AcidReflux) */
-  ra: "https://ra.co/promoters/157649",
+  ra: "https://ra.co/promoters/170601",
 };

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
 import { EVENTS, HOST_ORDER, RA_PROMOTER, type Event } from "@/lib/events";
@@ -6,7 +7,7 @@ import { EVENTS, HOST_ORDER, RA_PROMOTER, type Event } from "@/lib/events";
 export const metadata: Metadata = {
   title: "events",
   description:
-    "Bluegold and Acid Reflux events in Berlin — listening sessions, club nights and open-airs. Full history on Resident Advisor.",
+    "Bluegold events in Berlin — release parties and open-airs. Tickets and full history on Resident Advisor.",
 };
 
 /* la pagina si rigenera ogni ora: la classificazione
@@ -19,21 +20,30 @@ function berlinToday(): string {
   }).format(new Date());
 }
 
-/* niente prezzi: solo data, lineup, venue e link RA */
-function EventRowBody({ e, past }: { e: Event; past: boolean }) {
+function EventCardBody({ e, past }: { e: Event; past: boolean }) {
   return (
     <>
-      <div className="event-date">{e.date}</div>
-      <div>
-        <div className="event-title">{e.title}</div>
-        <div className="event-line">{e.line}</div>
-        <div className="event-venue">
+      <figure>
+        <Image
+          src={e.flyer}
+          alt={`${e.title} — flyer`}
+          width={960}
+          height={1200}
+          sizes="(max-width: 720px) 100vw, 33vw"
+        />
+      </figure>
+      <span className="event-card-meta">
+        <span className="event-card-head">
+          <span className="event-card-date">{e.date}</span>
+          <span className="event-card-buy">{past ? "past" : "tickets ↗"}</span>
+        </span>
+        <span className="event-card-title">{e.title}</span>
+        <span className="event-card-line">{e.line}</span>
+        <span className="event-card-venue">
           {e.venue}
           {e.time ? ` · ${e.time}` : ""}
-          {e.raPick ? " · ra pick" : ""}
-        </div>
-      </div>
-      <div className="event-buy">{past ? "past" : "tickets ↗"}</div>
+        </span>
+      </span>
     </>
   );
 }
@@ -59,31 +69,33 @@ export default function EventsPage() {
               <div className="section-header" data-enter>
                 <span className="eyebrow">{host}</span>
               </div>
-              {events.map((e) => {
-                const past = isPast(e);
+              <div className="event-grid">
+                {events.map((e) => {
+                  const past = isPast(e);
 
-                /* eventi passati: riga statica, link spento */
-                if (past) {
+                  /* eventi passati: card statica, link spento */
+                  if (past) {
+                    return (
+                      <div key={e.id} className="event-card is-past" data-enter>
+                        <EventCardBody e={e} past />
+                      </div>
+                    );
+                  }
+
                   return (
-                    <div key={e.id} className="event-row is-past" data-enter>
-                      <EventRowBody e={e} past />
-                    </div>
+                    <a
+                      key={e.id}
+                      className="event-card"
+                      href={e.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      data-enter
+                    >
+                      <EventCardBody e={e} past={false} />
+                    </a>
                   );
-                }
-
-                return (
-                  <a
-                    key={e.id}
-                    className="event-row"
-                    href={e.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-enter
-                  >
-                    <EventRowBody e={e} past={false} />
-                  </a>
-                );
-              })}
+                })}
+              </div>
             </section>
           );
         })}

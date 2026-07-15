@@ -5,7 +5,6 @@ import { Renderer, Program, Mesh, Geometry, Texture, RenderTarget, Flowmap } fro
 import {
   default_vert,
   advection_frag,
-  backgroundClock_frag,
   displayTexture_frag,
   fluidVelocity_frag,
   glassShading_frag,
@@ -27,10 +26,10 @@ const CONFIG = {
   feed: 0.054,
   kill: 0.0616,
   iterations: 10,
-  grain: 0.16,
+  grain: 0.13,
 };
 
-/* post-process: grana animata screen-space sopra il composite */
+/* post-process: grana fine + campo stelle nei neri (space) */
 const GRAIN_FRAG = /* glsl */ `
 precision highp float;
 uniform sampler2D inputMap;
@@ -38,17 +37,80 @@ uniform float uTime;
 uniform float uAmount;
 varying vec2 vUv;
 
-float hash(vec2 p) {
+float hashT(vec2 p) {
   return fract(sin(dot(p + fract(uTime), vec2(127.1, 311.7))) * 43758.5453);
+}
+float hashS(vec2 p) {
+  return fract(sin(dot(p, vec2(269.5, 183.3))) * 43758.5453);
 }
 
 void main() {
   vec3 col = texture2D(inputMap, vUv).rgb;
-  float g = hash(gl_FragCoord.xy) - 0.5;
-  float lum = col.r + col.g + col.b;
-  /* la grana morde i mezzitoni, respira meno sui neri pieni */
-  col += g * uAmount * (0.4 + 0.6 * smoothstep(0.0, 0.5, lum));
+  float lum = dot(col, vec3(0.3333));
+
+  /* grit fine e definito, morde i mezzitoni */
+  float g = hashT(gl_FragCoord.xy) - 0.5;
+  col += g * uAmount * (0.3 + 0.7 * smoothstep(0.0, 0.5, lum));
+
+  /* stelle: puntini fissi che scintillano piano, solo nel buio */
+  float s = hashS(floor(gl_FragCoord.xy));
+  float tw = 0.55 + 0.45 * sin(uTime * 2.0 + s * 60.0);
+  float star = smoothstep(0.9992, 0.9999, s) * tw * (1.0 - smoothstep(0.0, 0.4, lum));
+  col += star * 0.85;
+
   gl_FragColor = vec4(col, 1.0);
+}
+`;
+
+/* sfondo custom: via l'orologio della reference — orbite lente di
+   fasci di luce larghi e soffusi, con la stessa rifrazione */
+const BACKGROUND_FRAG = /* glsl */ `
+precision highp float;
+#define PI 3.14159265358979
+
+varying vec2 vUv;
+uniform vec2 uSize;
+uniform float uTime;
+uniform vec3 bgcolor;
+uniform vec3 circlecolor1;
+uniform vec3 circlecolor2;
+uniform vec3 circlecolor3;
+uniform vec2 parallax;
+
+vec3 drawCircle(vec2 coord, float t, float widthCore, float widthHalo) {
+  float radius = max(uSize.x, uSize.y) * 0.5;
+  vec2 origin = vec2(sin(t * PI * 2.0), cos(t * PI * 2.0)) * radius;
+  coord -= origin;
+
+  float r = length(coord) / radius;
+  float f = 1.0 / (abs(r - 1.0) * widthCore + 1.0);
+
+  vec2 displacement = -coord / (sqrt(max(0.0, 1.0 - r * r)) + 0.01) * f * step(r, 1.0);
+
+  /* fascio largo + alone blurrato attorno */
+  f = 1.0 / (abs(r - 1.0) * widthCore + 1.0);
+  f += 0.5 / (abs(r - 1.0) * widthHalo + 1.0);
+  f += step(r, 1.0) * 0.05 * (r + 1.0);
+
+  return vec3(displacement, f);
+}
+
+void main() {
+  vec2 coord = (vUv - 0.5) * uSize + parallax * 2.0;
+
+  /* tre orbite lente, slegate dall'orologio */
+  vec3 circle3 = drawCircle(coord, uTime * 0.017, 34.0, 7.0);
+  coord += circle3.xy * 0.12 + parallax * 10.0;
+  vec3 circle2 = drawCircle(coord, 0.62 - uTime * 0.006, 26.0, 6.0);
+  coord += circle2.xy * 0.12 + parallax * 20.0;
+  vec3 circle1 = drawCircle(coord, 0.31 + uTime * 0.0023, 18.0, 5.0);
+
+  vec3 color = bgcolor;
+  color = mix(color, circlecolor1, circle1.z);
+  color = mix(color, circlecolor2, circle2.z);
+  color = mix(color, circlecolor3, circle3.z);
+
+  gl_FragColor = vec4(color, 1.0);
 }
 `;
 
@@ -58,8 +120,13 @@ void main() {
  * reaction-diffusion è un canvas 2D su cui disegnamo marchio e
  * wordmark "bluegold": il vetro fluido cresce attorno al segno.
  */
-export default function FluidGlass() {
+export default function FluidGlass({ withMask = true, dim = false }) {
   const rootRef = useRef(null);
+  const maskRef = useRef(withMask);
+
+  useEffect(() => {
+    maskRef.current = withMask;
+  }, [withMask]);
 
   useEffect(() => {
     const root = rootRef.current;
@@ -123,10 +190,10 @@ export default function FluidGlass() {
       feed0: { value: CONFIG.feed },
       kill0: { value: CONFIG.kill },
     });
-    const backgroundClock = makeShader(backgroundClock_frag, {
+    const backgroundPass = makeShader(BACKGROUND_FRAG, {
       uSize: { value: [0, 0] },
       parallax: { value: [0, 0] },
-      clockHands: { value: [0, 0, 0] },
+      uTime: { value: 0 },
       bgcolor: { value: CONFIG.bgcolor },
       circlecolor1: { value: CONFIG.color1 },
       circlecolor2: { value: CONFIG.color2 },
@@ -191,44 +258,39 @@ export default function FluidGlass() {
     const maskCanvas = document.createElement("canvas");
     const maskCtx = maskCanvas.getContext("2d");
     let maskTexture;
-    const mark = new Image();
-    mark.src = "/assets/favicon-192.png";
-    let markRed = null;
-    mark.onload = () => {
-      /* tinta il marchio di rosso pieno: la mask legge il canale R */
-      const c = document.createElement("canvas");
-      c.width = mark.width;
-      c.height = mark.height;
-      const x = c.getContext("2d");
-      x.drawImage(mark, 0, 0);
-      x.globalCompositeOperation = "source-in";
-      x.fillStyle = "red";
-      x.fillRect(0, 0, c.width, c.height);
-      markRed = c;
-    };
 
-    const fontFamily =
-      getComputedStyle(document.documentElement)
-        .getPropertyValue("--font-zalando")
-        .split(",")[0]
-        .trim() || "sans-serif";
+    /* tinta un'immagine di rosso pieno: la mask legge il canale R */
+    function loadRed(src) {
+      const holder = { canvas: null, ratio: 1 };
+      const img = new Image();
+      img.src = src;
+      img.onload = () => {
+        const c = document.createElement("canvas");
+        c.width = img.naturalWidth;
+        c.height = img.naturalHeight;
+        const x = c.getContext("2d");
+        x.drawImage(img, 0, 0);
+        x.globalCompositeOperation = "source-in";
+        x.fillStyle = "red";
+        x.fillRect(0, 0, c.width, c.height);
+        holder.canvas = c;
+        holder.ratio = c.width / c.height;
+      };
+      return holder;
+    }
+
+    /* mask: SOLO il lettering ufficiale, niente marchio sopra */
+    const type = loadRed("/assets/bluegold-type.svg");
 
     function renderForeground(canvas, ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = "red";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
+      /* lettering solo dove richiesto (home) */
+      if (!maskRef.current || !type.canvas) return;
 
-      const cx = canvas.width / 2;
-      const cy = canvas.height / 2;
-      const size = Math.min(canvas.width / 7.5, canvas.height / 5);
-
-      if (markRed) {
-        const m = size * 1.7;
-        ctx.drawImage(markRed, cx - m / 2, cy - size * 0.62 - m / 2, m, m);
-      }
-      ctx.font = `300 ${Math.round(size)}px ${fontFamily}`;
-      ctx.fillText("bluegold", cx, cy + size * 0.85);
+      const portrait = canvas.width < canvas.height;
+      const w = canvas.width * (portrait ? 0.76 : 0.56);
+      const h = w / type.ratio;
+      ctx.drawImage(type.canvas, (canvas.width - w) / 2, (canvas.height - h) / 2, w, h);
     }
 
     function canvasTexture(target) {
@@ -370,15 +432,10 @@ export default function FluidGlass() {
 
       displayTexture(velocity, { textureMap: velocityTemp.texture, showAlpha: false });
 
-      const now = new Date();
-      backgroundClock(background, {
+      backgroundPass(background, {
         parallax: [parallax.x, parallax.y],
         uSize: [background.width, background.height],
-        clockHands: [
-          now.getHours() + now.getMinutes() / 60 + now.getSeconds() / 3600,
-          now.getMinutes() + now.getSeconds() / 60 + now.getMilliseconds() / 60000,
-          now.getSeconds() + now.getMilliseconds() / 1000,
-        ],
+        uTime: (performance.now() % 10000000) / 1000,
       });
       glassShading(composite, {
         pressureMap: pressure.texture,
@@ -403,5 +460,11 @@ export default function FluidGlass() {
     };
   }, []);
 
-  return <div ref={rootRef} className="fluid-root" aria-hidden="true" />;
+  return (
+    <div
+      ref={rootRef}
+      className={`fluid-root${dim ? " is-dim" : ""}`}
+      aria-hidden="true"
+    />
+  );
 }

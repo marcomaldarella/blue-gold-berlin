@@ -1,71 +1,87 @@
+export type Track = {
+  title: string;
+  artist: string;
+  /* nome file audio (senza estensione) sull'host esterno */
+  file: string;
+};
+
 export type Release = {
   slug: string;
   title: string;
   artist: string;
   catalog: string;
-  label: "bluegold" | "acid reflux";
   cover: string;
   url: string;
-  bandcampAlbumId: number;
+  tracks: Track[];
 };
+
+/* base esterna per gli mp3 (Cloudflare Pages: banda illimitata,
+   niente audio sul piano free di Vercel) */
+export const AUDIO_BASE = "https://bluegold-audio.pages.dev";
 
 export const RELEASES: Release[] = [
   {
-    slug: "sequor",
-    title: "Sequor",
-    artist: "Staktic",
-    catalog: "bg003",
-    label: "bluegold",
-    cover: "/assets/sequor.jpg",
-    url: "https://bluegold1.bandcamp.com/album/sequor",
-    bandcampAlbumId: 3720175905,
+    slug: "theom",
+    title: "Theom",
+    artist: "Mruda & Archypness",
+    catalog: "bg001",
+    cover: "/assets/theom.jpg",
+    url: "https://mruda.bandcamp.com/album/theom?label=447749523",
+    tracks: [
+      { title: "Kalevet", artist: "Mruda", file: "bg001-a1-kalevet" },
+      { title: "Theom", artist: "Mruda", file: "bg001-a2-theom" },
+      { title: "Rog", artist: "Archypness", file: "bg001-b1-rog" },
+      { title: "Pudja", artist: "Archypness", file: "bg001-b2-pudja" },
+    ],
   },
   {
     slug: "shape-shifting",
     title: "Shape Shifting",
     artist: "Mruda",
     catalog: "bg002",
-    label: "bluegold",
     cover: "/assets/shape-shifting.jpg",
     url: "https://mruda.bandcamp.com/album/shape-shifting?label=447749523",
-    bandcampAlbumId: 1658586204,
+    tracks: [
+      { title: "Womb", artist: "Mruda", file: "bg002-a1-womb" },
+      { title: "Colours", artist: "Mruda", file: "bg002-a2-colours" },
+      { title: "Shape Shifting", artist: "Mruda", file: "bg002-b1-shape-shifting" },
+      { title: "Womb Reimagined", artist: "Mruda", file: "bg002-b2-womb-reimagined" },
+    ],
   },
   {
-    slug: "theom",
-    title: "Theom",
-    artist: "Mruda",
-    catalog: "bg001",
-    label: "bluegold",
-    cover: "/assets/theom.jpg",
-    url: "https://mruda.bandcamp.com/album/theom?label=447749523",
-    bandcampAlbumId: 1993218674,
-  },
-  {
-    slug: "a-gate-to-the-forest",
-    title: "A Gate To The Forest",
-    artist: "Mariel Loah, Marijn S, BB. angel, Ayū",
-    catalog: "ar001",
-    label: "acid reflux",
-    cover: "/assets/a-gate-to-the-forest.jpg",
-    url: "https://acidrefluxrecs.bandcamp.com/album/a-gate-to-the-forest",
-    bandcampAlbumId: 3236638117,
-  },
-  {
-    slug: "dead-channels-ritual",
-    title: "Dead Channels Ritual",
-    artist: "Delta Division",
-    catalog: "ar002",
-    label: "acid reflux",
-    cover: "/assets/dead-channels-ritual.jpg",
-    url: "https://acidrefluxrecs.bandcamp.com/album/dead-channels-ritual",
-    bandcampAlbumId: 3288299294,
+    slug: "sequor",
+    title: "Sequor",
+    artist: "Staktic",
+    catalog: "bg003",
+    cover: "/assets/sequor.jpg",
+    url: "https://bluegold1.bandcamp.com/album/sequor",
+    tracks: [
+      { title: "Ardósia", artist: "Staktic", file: "bg003-01-ardosia" },
+      { title: "Corallus", artist: "Staktic", file: "bg003-02-corallus" },
+      { title: "Criptocromo", artist: "Staktic", file: "bg003-03-criptocromo" },
+      { title: "Halo Nuclei", artist: "Staktic", file: "bg003-04-halo-nuclei" },
+      { title: "Hidrólise", artist: "Staktic", file: "bg003-05-hidrolise" },
+      { title: "Iara", artist: "Staktic", file: "bg003-06-iara" },
+      { title: "Quetiapina", artist: "Staktic", file: "bg003-07-quetiapina" },
+      { title: "Sequor", artist: "Staktic", file: "bg003-08-sequor" },
+    ],
   },
 ];
 
-export const RADIO_TRACKS = [
-  { title: "mruda — theom", catalog: "bg001", albumId: 1993218674 },
-  { title: "mruda — shape shifting", catalog: "bg002", albumId: 1658586204 },
-  { title: "staktic — sequor", catalog: "bg003", albumId: 3720175905 },
-  { title: "mariel loah — a gate to the forest", catalog: "ar001", albumId: 3236638117 },
-  { title: "delta division — dead channel rituals", catalog: "ar002", albumId: 3288299294 },
-];
+/* playlist piatta per il player: tutto il catalogo in fila */
+export type PlaylistItem = Track & {
+  cover: string;
+  catalog: string;
+  releaseTitle: string;
+  url: string;
+};
+
+export const PLAYLIST: PlaylistItem[] = RELEASES.flatMap((r) =>
+  r.tracks.map((t) => ({
+    ...t,
+    cover: r.cover,
+    catalog: r.catalog,
+    releaseTitle: r.title,
+    url: r.url,
+  }))
+);

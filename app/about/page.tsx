@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
-import { RADIO_TRACKS } from "@/lib/releases";
+import { PLAYLIST } from "@/lib/releases";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -90,15 +90,19 @@ export default function AboutPage() {
             </ul>
 
             <div className="section-header" data-enter>
-              <span className="eyebrow">bluegold radio · 5 tracks</span>
+              <span className="eyebrow">
+                bluegold radio · {PLAYLIST.length} tracks
+              </span>
             </div>
             <ul className="radio-list" data-enter>
-              {RADIO_TRACKS.map((t, i) => (
-                <li key={t.catalog}>
-                  {/* apre il player della home su quel brano */}
+              {PLAYLIST.map((t, i) => (
+                <li key={`${t.catalog}-${t.file}`}>
+                  {/* apre il player su quel brano */}
                   <Link className="radio-item" href={`/?track=${i}`}>
                     <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="title">{t.title}</span>
+                    <span className="title">
+                      {t.artist} — {t.title}
+                    </span>
                     <span className="cat">{t.catalog}</span>
                   </Link>
                 </li>

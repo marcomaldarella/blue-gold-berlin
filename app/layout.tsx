@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import SiteHeader from "@/components/SiteHeader";
 import PlayerDrawer from "@/components/PlayerDrawer";
+import FluidHero from "@/components/fluid/FluidHero";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -93,6 +94,8 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
         />
         <SiteHeader />
+        {/* sfondo fluid glass globale, mai smontato tra le pagine */}
+        <FluidHero />
         {children}
         {/* player globale: persiste tra le pagine, la musica non si
             interrompe navigando */}

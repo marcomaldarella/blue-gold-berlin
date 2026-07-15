@@ -1,6 +1,5 @@
 import PageEntrance from "@/components/PageEntrance";
 import SplashScreen from "@/components/SplashScreen";
-import FluidHero from "@/components/fluid/FluidHero";
 import { SITE } from "@/lib/site";
 
 export default function HomePage() {
@@ -10,9 +9,6 @@ export default function HomePage() {
 
       {/* sfondo chrome b/n blurred, dietro a tutto */}
       <div className="home-bg" aria-hidden="true" />
-
-      {/* fluid glass WebGL: copre l'hero statico quando attivo */}
-      <FluidHero />
 
       <div className="home-hero">
         {/* eslint-disable-next-line @next/next/no-img-element */}
