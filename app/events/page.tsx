@@ -35,7 +35,7 @@ function EventCardBody({ e, past }: { e: Event; past: boolean }) {
       <span className="event-card-meta">
         <span className="event-card-head">
           <span className="event-card-date">{e.date}</span>
-          <span className="event-card-buy">{past ? "past" : "tickets ↗"}</span>
+          <span className="event-card-buy">{past ? "past" : "upcoming"}</span>
         </span>
         <span className="event-card-title">{e.title}</span>
         <span className="event-card-line">{e.line}</span>
@@ -43,6 +43,7 @@ function EventCardBody({ e, past }: { e: Event; past: boolean }) {
           {e.venue}
           {e.time ? ` · ${e.time}` : ""}
         </span>
+        {!past && <span className="event-card-cta">buy tickets ↗</span>}
       </span>
     </>
   );
