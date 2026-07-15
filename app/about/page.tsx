@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import SiteFooter from "@/components/SiteFooter";
 import PageEntrance from "@/components/PageEntrance";
-import { PLAYLIST } from "@/lib/releases";
 import { SITE } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -30,20 +28,13 @@ export default function AboutPage() {
             <div data-enter>
               <p>
                 <strong>bluegold</strong> is a record label and studio based in{" "}
-                <strong>berlin, germany</strong>, founded by mruda. the short
-                version, straight from the sleeve: sound design for altered
-                states of mind.
+                <strong>berlin</strong>, founded by mruda. straight from the
+                sleeve: sound design for altered states of mind.
               </p>
               <p>
-                the catalogue runs on two tracks — bluegold (bg) for the
-                deeper, more introspective material, and acid reflux (ar) for
-                the club-facing side. small runs, slow pace, everything
-                purchasable on bandcamp.
-              </p>
-              <p>
-                off record, the label hosts listening sessions, club nights
-                and open-airs around berlin — see the events page for what is
-                coming next.
+                deep, introspective electronics in small runs, at a slow pace —
+                everything purchasable on bandcamp. off record: listening
+                sessions, club nights and open-airs around berlin.
               </p>
             </div>
           </section>
@@ -89,25 +80,6 @@ export default function AboutPage() {
               </li>
             </ul>
 
-            <div className="section-header" data-enter>
-              <span className="eyebrow">
-                bluegold radio · {PLAYLIST.length} tracks
-              </span>
-            </div>
-            <ul className="radio-list" data-enter>
-              {PLAYLIST.map((t, i) => (
-                <li key={`${t.catalog}-${t.file}`}>
-                  {/* apre il player su quel brano */}
-                  <Link className="radio-item" href={`/?track=${i}`}>
-                    <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                    <span className="title">
-                      {t.artist} — {t.title}
-                    </span>
-                    <span className="cat">{t.catalog}</span>
-                  </Link>
-                </li>
-              ))}
-            </ul>
           </section>
         </div>
       </div>
